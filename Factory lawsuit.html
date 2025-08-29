@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提供劳务者受害责任纠纷分析报告</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script>
+        // Tailwind配置
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',    // 深蓝色主色调（专业、权威）
+                        secondary: '#3b82f6',  // 中蓝色辅助色
+                        accent: '#bfdbfe',     // 浅蓝色强调色
+                        neutral: '#f8fafc',    // 浅灰色背景
+                        dark: '#0f172a',       // 深色文本
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            }
+            .bg-gradient {
+                background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+            }
+            .nav-active {
+                @apply bg-primary text-white;
+            }
+        }
+    </style>
+</head>
+<body class="bg-neutral text-dark font-sans">
+    <!-- 顶部导航栏 -->
+    <header class="sticky top-0 z-50 bg-white shadow-md transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-primary flex items-center">
+                <i class="fa fa-gavel mr-2"></i>
+                <span class="hidden sm:inline">法律分析报告</span>
+            </h1>
+            <button id="menuToggle" class="md:hidden text-primary text-xl">
+                <i class="fa fa-bars"></i>
+            </button>
+            <nav id="mainNav" class="hidden md:flex space-x-1">
+                <a href="#background" class="px-3 py-2 rounded hover:bg-accent transition-colors duration-200">案件背景</a>
+                <a href="#liability" class="px-3 py-2 rounded hover:bg-accent transition-colors duration-200">责任划分</a>
+                <a href="#disability" class="px-3 py-2 rounded hover:bg-accent transition-colors duration-200">伤残鉴定</a>
+                <a href="#compensation" class="px-3 py-2 rounded hover:bg-accent transition-colors duration-200">赔偿分析</a>
+                <a href="#strategy" class="px-3 py-2 rounded hover:bg-accent transition-colors duration-200">诉讼策略</a>
+                <a href="#risk" class="px-3 py-2 rounded hover:bg-accent transition-colors duration-200">风险评估</a>
+                <a href="#conclusion" class="px-3 py-2 rounded hover:bg-accent transition-colors duration-200">结论建议</a>
+            </nav>
+        </div>
+        <!-- 移动端导航菜单 -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg absolute w-full">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-1">
+                <a href="#background" class="px-3 py-2 rounded hover:bg-accent transition-colors duration-200">案件背景</a>
+                <a href="#liability" class="px-3 py-2 rounded hover:bg-accent transition-colors duration-200">责任划分</a>
+                <a href="#disability" class="px-3 py-2 rounded hover:bg-accent transition-colors duration-200">伤残鉴定</a>
+                <a href="#compensation" class="px-3 py-2 rounded hover:bg-accent transition-colors duration-200">赔偿分析</a>
+                <a href="#strategy" class="px-3 py-2 rounded hover:bg-accent transition-colors duration-200">诉讼策略</a>
+                <a href="#risk" class="px-3 py-2 rounded hover:bg-accent transition-colors duration-200">风险评估</a>
+                <a href="#conclusion" class="px-3 py-2 rounded hover:bg-accent transition-colors duration-200">结论建议</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 报告标题 -->
+        <div class="mb-12 text-center">
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-4 text-shadow">提供劳务者受害责任纠纷起诉阶段责任划分与赔偿策略分析报告</h1>
+            <div class="w-24 h-1 bg-secondary mx-auto rounded-full"></div>
+        </div>
+
+        <!-- 一、案件背景与法律关系概述 -->
+        <section id="background" class="mb-16 scroll-mt-20">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 transition-all duration-300 hover:shadow-xl">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center mr-3">
+                        <i class="fa fa-info"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-primary">一、案件背景与法律关系概述</h2>
+                </div>
+
+                <!-- 1.1 基本案情与法律关系 -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">1.1</span>
+                        基本案情与法律关系
+                    </h3>
+                    <div class="pl-10">
+                        <p class="mb-4 leading-relaxed">
+                            您所面临的法律纠纷属于典型的<strong class="text-primary">提供劳务者受害责任纠纷</strong>。根据描述，案件基本事实如下：您父亲以家庭小生意形式承接工厂房顶维修工作，通过挂靠其他公司资质开展业务，与工厂未签订正式合同，仅以费用账单作为业务往来凭证。施工人员由挂靠公司介绍，一名老年工人因自身操作不当（梯子使用不规范）导致摔倒，造成4根肋骨骨折，现已康复出院。您父亲已垫付1万余元医药费，但伤者家属提出20余万元赔偿要求，其中包含不合理的高额护理费和伙食费。
+                        </p>
+                        
+                        <h4 class="font-semibold text-lg mb-2 mt-6">法律关系分析：</h4>
+                        <div class="grid md:grid-cols-2 gap-4 mt-4">
+                            <div class="bg-accent/30 p-4 rounded-lg border-l-4 border-primary">
+                                <p class="font-medium">1. 您家庭与伤者之间</p>
+                                <p>形成<strong>个人劳务关系</strong>，而非劳动关系。您父亲作为接受劳务一方，伤者作为提供劳务一方。</p>
+                            </div>
+                            <div class="bg-accent/30 p-4 rounded-lg border-l-4 border-primary">
+                                <p class="font-medium">2. 您家庭与挂靠公司之间</p>
+                                <p>属于<strong>挂靠经营关系</strong>。挂靠公司允许以其名义承接工程，收取挂靠费用，应对经营活动承担一定法律责任。</p>
+                            </div>
+                            <div class="bg-accent/30 p-4 rounded-lg border-l-4 border-primary">
+                                <p class="font-medium">3. 您家庭与工厂之间</p>
+                                <p>形成<strong>事实承揽关系</strong>。工厂作为定作人，您父亲作为承揽人，通过费用账单确认业务往来。</p>
+                            </div>
+                            <div class="bg-accent/30 p-4 rounded-lg border-l-4 border-primary">
+                                <p class="font-medium">4. 工厂与挂靠公司之间</p>
+                                <p>工厂通过您父亲与挂靠公司建立工程承揽关系，挂靠公司作为被挂靠方，应对施工安全承担连带责任。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1.2 案件特点与争议焦点 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">1.2</span>
+                        案件特点与争议焦点
+                    </h3>
+                    <div class="pl-10">
+                        <div class="mb-8">
+                            <h4 class="font-semibold text-lg mb-3">案件特点：</h4>
+                            <ul class="space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                    <span>伤者为退休人员，未享受城镇职工养老保险，属于"超过法定退休年龄的劳动者"</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                    <span>未签订正式合同，仅有费用往来票据，存在法律关系证明困难</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                    <span>未为伤者购买工伤保险或其他商业保险，面临较大经济风险</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                    <span>已垫付1万余元医疗费用，表现出积极解决问题的态度</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-secondary mt-1 mr-2"></i>
+                                    <span>伤者已康复出院，伤情稳定，具备伤残鉴定条件</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-lg mb-3">争议焦点：</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div class="bg-white border border-accent rounded-lg p-3 hover:shadow-md transition-shadow">
+                                    <div class="flex items-center">
+                                        <div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs mr-2">1</div>
+                                        <p class="font-medium">责任主体认定</p>
+                                    </div>
+                                    <p class="text-sm pl-8">谁应对伤者的损害承担赔偿责任？责任如何划分？</p>
+                                </div>
+                                <div class="bg-white border border-accent rounded-lg p-3 hover:shadow-md transition-shadow">
+                                    <div class="flex items-center">
+                                        <div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs mr-2">2</div>
+                                        <p class="font-medium">责任比例划分</p>
+                                    </div>
+                                    <p class="text-sm pl-8">各方过错程度如何？赔偿责任应如何分担？</p>
+                                </div>
+                                <div class="bg-white border border-accent rounded-lg p-3 hover:shadow-md transition-shadow">
+                                    <div class="flex items-center">
+                                        <div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs mr-2">3</div>
+                                        <p class="font-medium">赔偿金额合理性</p>
+                                    </div>
+                                    <p class="text-sm pl-8">20余万元赔偿是否合理？哪些项目符合法律规定？</p>
+                                </div>
+                                <div class="bg-white border border-accent rounded-lg p-3 hover:shadow-md transition-shadow">
+                                    <div class="flex items-center">
+                                        <div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs mr-2">4</div>
+                                        <p class="font-medium">伤残鉴定影响</p>
+                                    </div>
+                                    <p class="text-sm pl-8">未进行伤残鉴定对责任划分和赔偿金额有何影响？</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 二、起诉阶段责任划分的法律分析 -->
+        <section id="liability" class="mb-16 scroll-mt-20">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 transition-all duration-300 hover:shadow-xl">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center mr-3">
+                        <i class="fa fa-balance-scale"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-primary">二、起诉阶段责任划分的法律分析</h2>
+                </div>
+
+                <!-- 2.1 责任主体的确定 -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">2.1</span>
+                        责任主体的确定
+                    </h3>
+                    <div class="pl-10">
+                        <p class="mb-4 leading-relaxed">
+                            在提供劳务者受害责任纠纷中，责任主体的确定是首要问题。根据描述和相关法律规定，本案可能的责任主体包括：
+                        </p>
+                        
+                        <div class="space-y-4 mt-6">
+                            <div class="bg-white border border-accent rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <p class="font-medium text-primary">1. 您家庭（接受劳务一方）</p>
+                                <p class="mt-2">作为直接雇佣伤者的一方，根据《民法典》第1192条规定，提供劳务一方因劳务受到损害的，根据双方各自的过错承担相应的责任。</p>
+                            </div>
+                            
+                            <div class="bg-white border border-accent rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <p class="font-medium text-primary">2. 挂靠公司</p>
+                                <p class="mt-2">作为被挂靠方，根据《民法典》及相关司法解释，允许他人挂靠经营的单位应对挂靠人的经营活动承担连带责任。最高人民法院明确规定，被挂靠单位通过出借名义、账户、印章等事实上的挂靠行为，应当承担用工主体责任。</p>
+                            </div>
+                            
+                            <div class="bg-white border border-accent rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <p class="font-medium text-primary">3. 工厂（定作人）</p>
+                                <p class="mt-2">作为工程的发包方，如果明知或应知您父亲和挂靠公司不具备相应资质，仍将工程发包，根据《民法典》第1193条规定，定作人对定作、指示或者选任有过错的，应当承担相应的责任。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 p-4 bg-accent/30 rounded-lg border-l-4 border-primary">
+                            <p class="italic">
+                                <i class="fa fa-lightbulb-o text-primary mr-2"></i>
+                                司法实践建议：法院通常会追加必要当事人。建议在诉讼中申请追加挂靠公司和工厂为共同被告，以明确各方责任。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.2 责任划分的法律依据与原则 -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">2.2</span>
+                        责任划分的法律依据与原则
+                    </h3>
+                    <div class="pl-10">
+                        <p class="mb-4">本案责任划分主要依据《中华人民共和国民法典》及相关司法解释，核心原则是"过错责任原则"，即根据各方过错程度确定责任比例：</p>
+                        
+                        <div class="overflow-x-auto mb-6">
+                            <table class="min-w-full bg-white border border-accent rounded-lg">
+                                <thead>
+                                    <tr class="bg-primary text-white">
+                                        <th class="py-3 px-4 text-left">法律依据</th>
+                                        <th class="py-3 px-4 text-left">核心内容</th>
+                                        <th class="py-3 px-4 text-left">适用情形</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-accent/50">
+                                        <td class="py-3 px-4 font-medium">《民法典》第1192条</td>
+                                        <td class="py-3 px-4">个人之间形成劳务关系，提供劳务一方因劳务造成他人损害的，由接受劳务一方承担侵权责任。提供劳务一方因劳务受到损害的，根据双方各自的过错承担相应的责任。</td>
+                                        <td class="py-3 px-4">您家庭与伤者之间的责任划分</td>
+                                    </tr>
+                                    <tr class="border-b border-accent/50">
+                                        <td class="py-3 px-4 font-medium">《民法典》第1193条</td>
+                                        <td class="py-3 px-4">承揽人在完成工作过程中造成第三人损害或者自己损害的，定作人不承担侵权责任。但是，定作人对定作、指示或者选任有过错的，应当承担相应的责任。</td>
+                                        <td class="py-3 px-4">工厂作为定作人是否担责</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 font-medium">《民法典》第178条</td>
+                                        <td class="py-3 px-4">二人以上依法承担连带责任的，权利人有权请求部分或者全部连带责任人承担责任。连带责任人的责任份额根据各自责任大小确定；难以确定责任大小的，平均承担责任。</td>
+                                        <td class="py-3 px-4">挂靠公司与您家庭的连带责任</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="p-4 bg-accent/20 rounded-lg">
+                            <h4 class="font-semibold mb-2">过错认定的关键因素：</h4>
+                            <ul class="space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                                    <span>接受劳务方是否提供了安全的工作环境和必要的安全保护措施</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                                    <span>是否对提供劳务者进行了必要的安全教育和技术培训</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                                    <span>提供劳务者是否按照操作规范作业，是否存在违规操作</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                                    <span>定作人（工厂）在选任承揽人时是否尽到了合理审查义务</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.3 各方责任比例预测 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">2.3</span>
+                        各方责任比例预测
+                    </h3>
+                    <div class="pl-10">
+                        <p class="mb-6">结合案件事实和司法实践，对各方责任比例预测如下：</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-8 mb-8">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-4 text-center">责任比例预测</h4>
+                                <div class="relative pt-1">
+                                    <canvas id="liabilityChart" width="400" height="300"></canvas>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="bg-white border border-accent rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-medium">伤者自身责任</span>
+                                        <span class="text-primary font-bold">30%-40%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-red-500 h-2.5 rounded-full" style="width: 35%"></div>
+                                    </div>
+                                    <p class="mt-2 text-sm">因自身操作不当（梯子使用不规范）导致事故，存在明显过错</p>
+                                </div>
+                                
+                                <div class="bg-white border border-accent rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-medium">您家庭责任</span>
+                                        <span class="text-primary font-bold">30%-40%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-primary h-2.5 rounded-full" style="width: 35%"></div>
+                                    </div>
+                                    <p class="mt-2 text-sm">作为接受劳务方，对施工现场安全管理存在不足</p>
+                                </div>
+                                
+                                <div class="bg-white border border-accent rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-medium">挂靠公司责任</span>
+                                        <span class="text-primary font-bold">15%-20%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-secondary h-2.5 rounded-full" style="width: 17%"></div>
+                                    </div>
+                                    <p class="mt-2 text-sm">作为被挂靠单位，对施工安全负有监督管理责任</p>
+                                </div>
+                                
+                                <div class="bg-white border border-accent rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-medium">工厂责任</span>
+                                        <span class="text-primary font-bold">0%-15%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-blue-400 h-2.5 rounded-full" style="width: 10%"></div>
+                                    </div>
+                                    <p class="mt-2 text-sm">如存在选任过失，需承担相应责任，否则不承担责任</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-primary/10 rounded-lg border-l-4 border-primary">
+                            <p class="font-medium mb-2">责任比例认定的关键因素：</p>
+                            <ul class="space-y-1 text-sm">
+                                <li class="flex items-start">
+                                    <i class="fa fa-check text-primary mt-1 mr-2"></i>
+                                    <span>您父亲是否对施工现场采取了必要的安全防护措施</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check text-primary mt-1 mr-2"></i>
+                                    <span>是否对施工人员进行了安全教育和安全技术交底</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check text-primary mt-1 mr-2"></i>
+                                    <span>工厂在选择施工方时是否审查了相应资质</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check text-primary mt-1 mr-2"></i>
+                                    <span>挂靠公司是否履行了对挂靠项目的安全管理义务</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check text-primary mt-1 mr-2"></i>
+                                    <span>伤者违规操作的具体情节和程度</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 三、伤残鉴定与赔偿项目分析 -->
+        <section id="disability" class="mb-16 scroll-mt-20">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 transition-all duration-300 hover:shadow-xl">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center mr-3">
+                        <i class="fa fa-stethoscope"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-primary">三、伤残鉴定与赔偿项目分析</h2>
+                </div>
+
+                <!-- 3.1 伤残等级预测 -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">3.1</span>
+                        伤残等级预测
+                    </h3>
+                    <div class="pl-10">
+                        <p class="mb-4">根据描述，伤者造成4根肋骨骨折，现已康复出院。参照《人体损伤致残程度分级》标准，对可能的伤残等级分析如下：</p>
+                        
+                        <div class="bg-white border border-accent rounded-lg p-5 mb-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mr-3">
+                                    <i class="fa fa-medkit"></i>
+                                </div>
+                                <h4 class="font-semibold text-lg">可能的伤残等级：十级伤残</h4>
+                            </div>
+                            
+                            <p class="mb-3">依据：《人体损伤致残程度分级》规定，"肋骨骨折6根以上，或者肋骨部分缺失2根以上；肋骨骨折4根以上并后遗2处畸形愈合"构成十级伤残。</p>
+                            
+                            <p>本案中伤者为4根肋骨骨折，若未出现畸形愈合，可能不构成伤残等级；若存在畸形愈合，则可能构成十级伤残。最终需以专业司法鉴定机构的鉴定意见为准。</p>
+                        </div>
+                        
+                        <div class="p-4 bg-accent/30 rounded-lg">
+                            <h4 class="font-semibold mb-2">伤残鉴定建议：</h4>
+                            <ul class="space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fa fa-arrow-right text-primary mt-1 mr-2"></i>
+                                    <span>建议在诉讼过程中申请法院委托专业鉴定机构进行伤残等级鉴定</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-arrow-right text-primary mt-1 mr-2"></i>
+                                    <span>鉴定内容应包括：伤残等级、误工期、护理期、营养期（"三期"鉴定）</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-arrow-right text-primary mt-1 mr-2"></i>
+                                    <span>选择具有法定资质的司法鉴定机构，确保鉴定结果的法律效力</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3.2 赔偿项目与计算标准 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">3.2</span>
+                        赔偿项目与计算标准
+                    </h3>
+                    <div class="pl-10">
+                        <p class="mb-6">根据《民法典》及相关司法解释，提供劳务者受害可主张的赔偿项目及计算标准如下：</p>
+                        
+                        <div class="overflow-x-auto mb-6">
+                            <table class="min-w-full bg-white border border-accent rounded-lg">
+                                <thead>
+                                    <tr class="bg-primary text-white">
+                                        <th class="py-3 px-4 text-left">赔偿项目</th>
+                                        <th class="py-3 px-4 text-left">计算标准</th>
+                                        <th class="py-3 px-4 text-left">本案预估金额</th>
+                                        <th class="py-3 px-4 text-left">备注</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-accent/50">
+                                        <td class="py-3 px-4 font-medium">医疗费</td>
+                                        <td class="py-3 px-4">实际发生的医疗费用，凭票据计算</td>
+                                        <td class="py-3 px-4">10,000-15,000元</td>
+                                        <td class="py-3 px-4">已垫付1万余元</td>
+                                    </tr>
+                                    <tr class="border-b border-accent/50">
+                                        <td class="py-3 px-4 font-medium">误工费</td>
+                                        <td class="py-3 px-4">误工时间×收入状况</td>
+                                        <td class="py-3 px-4">5,000-10,000元</td>
+                                        <td class="py-3 px-4">根据误工期鉴定及收入情况确定</td>
+                                    </tr>
+                                    <tr class="border-b border-accent/50">
+                                        <td class="py-3 px-4 font-medium">护理费</td>
+                                        <td class="py-3 px-4">护理期限×护理人员收入或当地护工报酬</td>
+                                        <td class="py-3 px-4">3,000-6,000元</td>
+                                        <td class="py-3 px-4">伤者家属主张的高额护理费可能不被支持</td>
+                                    </tr>
+                                    <tr class="border-b border-accent/50">
+                                        <td class="py-3 px-4 font-medium">交通费</td>
+                                        <td class="py-3 px-4">根据就医实际发生的交通费用计算</td>
+                                        <td class="py-3 px-4">500-1,000元</td>
+                                        <td class="py-3 px-4">需提供相应票据</td>
+                                    </tr>
+                                    <tr class="border-b border-accent/50">
+                                        <td class="py-3 px-4 font-medium">住院伙食补助费</td>
+                                        <td class="py-3 px-4">住院天数×当地国家机关一般工作人员出差伙食补助标准</td>
+                                        <td class="py-3 px-4">1,000-2,000元</td>
+                                        <td class="py-3 px-4">一般为每天50-100元</td>
+                                    </tr>
+                                    <tr class="border-b border-accent/50">
+                                        <td class="py-3 px-4 font-medium">营养费</td>
+                                        <td class="py-3 px-4">根据伤残情况参照医疗机构意见确定</td>
+                                        <td class="py-3 px-4">2,000-4,000元</td>
+                                        <td class="py-3 px-4">根据营养期鉴定确定</td>
+                                    </tr>
+                                    <tr class="border-b border-accent/50">
+                                        <td class="py-3 px-4 font-medium">残疾赔偿金</td>
+                                        <td class="py-3 px-4">根据伤残等级，按照受诉法院所在地上一年度城镇居民人均可支配收入或者农村居民人均纯收入标准，自定残之日起按二十年计算</td>
+                                        <td class="py-3 px-4">0-100,000元</td>
+                                        <td class="py-3 px-4">若构成十级伤残，城镇标准约为10万元左右，农村标准约为4万元左右</td>
+                                    </tr>
+                                    <tr class="border-b border-accent/50">
+                                        <td class="py-3 px-4 font-medium">精神损害抚慰金</td>
+                                        <td class="py-3 px-4">根据伤残等级和当地司法实践确定</td>
+                                        <td class="py-3 px-4">0-5,000元</td>
+                                        <td class="py-3 px-4">若构成十级伤残，一般不超过5,000元</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 font-medium">总计</td>
+                                        <td class="py-3 px-4">-</td>
+                                        <td class="py-3 px-4 font-bold">21,500-143,000元</td>
+                                        <td class="py-3 px-4">根据是否构成伤残有所不同</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="p-4 bg-primary/10 rounded-lg">
+                            <p class="font-medium mb-2">关于赔偿金额的特别说明：</p>
+                            <ul class="space-y-1 text-sm">
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-primary mt-1 mr-2"></i>
+                                    <span>伤者家属提出的20余万元赔偿要求明显偏高，尤其是护理费和伙食费部分</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-primary mt-1 mr-2"></i>
+                                    <span>若不构成伤残，合理赔偿金额应在2-4万元左右（已扣除已垫付的1万元）</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-primary mt-1 mr-2"></i>
+                                    <span>若构成十级伤残，合理赔偿金额应在5-10万元左右（已扣除已垫付的1万元）</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-primary mt-1 mr-2"></i>
+                                    <span>最终赔偿金额需根据责任比例划分后确定各方实际承担的数额</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 四、赔偿金额计算与责任承担 -->
+        <section id="compensation" class="mb-16 scroll-mt-20">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 transition-all duration-300 hover:shadow-xl">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center mr-3">
+                        <i class="fa fa-calculator"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-primary">四、赔偿金额计算与责任承担</h2>
+                </div>
+
+                <!-- 4.1 不同情形下的赔偿金额计算 -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">4.1</span>
+                        不同情形下的赔偿金额计算
+                    </h3>
+                    <div class="pl-10">
+                        <p class="mb-6">结合责任比例预测和赔偿项目分析，在不同情形下各方应承担的赔偿金额如下：</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div class="bg-white border border-accent rounded-lg overflow-hidden shadow-sm">
+                                <div class="bg-primary text-white p-3">
+                                    <h4 class="font-semibold">情形一：不构成伤残</h4>
+                                    <p class="text-sm opacity-90">总赔偿金额约30,000元（已含已垫付的10,000元）</p>
+                                </div>
+                                <div class="p-4">
+                                    <ul class="space-y-3">
+                                        <li class="flex justify-between">
+                                            <span>您家庭承担（35%）：</span>
+                                            <span class="font-medium">10,500元</span>
+                                        </li>
+                                        <li class="flex justify-between">
+                                            <span>挂靠公司承担（17%）：</span>
+                                            <span class="font-medium">5,100元</span>
+                                        </li>
+                                        <li class="flex justify-between">
+                                            <span>工厂承担（10%）：</span>
+                                            <span class="font-medium">3,000元</span>
+                                        </li>
+                                        <li class="flex justify-between">
+                                            <span>伤者自行承担（38%）：</span>
+                                            <span class="font-medium">11,400元</span>
+                                        </li>
+                                        <li class="border-t border-gray-200 pt-3 mt-3 flex justify-between font-bold text-primary">
+                                            <span>您家庭还需支付：</span>
+                                            <span>500元（已扣除垫付的10,000元）</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border border-accent rounded-lg overflow-hidden shadow-sm">
+                                <div class="bg-primary text-white p-3">
+                                    <h4 class="font-semibold">情形二：构成十级伤残（城镇标准）</h4>
+                                    <p class="text-sm opacity-90">总赔偿金额约120,000元（已含已垫付的10,000元）</p>
+                                </div>
+                                <div class="p-4">
+                                    <ul class="space-y-3">
+                                        <li class="flex justify-between">
+                                            <span>您家庭承担（35%）：</span>
+                                            <span class="font-medium">42,000元</span>
+                                        </li>
+                                        <li class="flex justify-between">
+                                            <span>挂靠公司承担（17%）：</span>
+                                            <span class="font-medium">20,400元</span>
+                                        </li>
+                                        <li class="flex justify-between">
+                                            <span>工厂承担（10%）：</span>
+                                            <span class="font-medium">12,000元</span>
+                                        </li>
+                                        <li class="flex justify-between">
+                                            <span>伤者自行承担（38%）：</span>
+                                            <span class="font-medium">45,600元</span>
+                                        </li>
+                                        <li class="border-t border-gray-200 pt-3 mt-3 flex justify-between font-bold text-primary">
+                                            <span>您家庭还需支付：</span>
+                                            <span>32,000元（已扣除垫付的10,000元）</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-accent/30 rounded-lg">
+                            <h4 class="font-semibold mb-2">赔偿金额计算说明：</h4>
+                            <ul class="space-y-2 text-sm">
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-primary mt-1 mr-2"></i>
+                                    <span>上述计算基于责任比例预测的中间值，实际赔偿金额会根据法院认定的责任比例有所调整</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-primary mt-1 mr-2"></i>
+                                    <span>农村居民与城镇居民的残疾赔偿金标准不同，上述计算分别按城镇标准和农村标准进行了测算</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-info-circle text-primary mt-1 mr-2"></i>
+                                    <span>已垫付的10,000元医疗费用在最终计算时应予以扣除</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4.2 连带责任与追偿权 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">4.2</span>
+                        连带责任与追偿权
+                    </h3>
+                    <div class="pl-10">
+                        <p class="mb-4">在本案中，您家庭与挂靠公司之间可能存在连带责任关系，具体法律关系如下：</p>
+                        
+                        <div class="bg-white border border-accent rounded-lg p-5 mb-6">
+                            <h4 class="font-semibold text-lg mb-3">连带责任法律分析</h4>
+                            
+                            <p class="mb-3">根据《民法典》第178条规定，连带责任意味着受害人有权向任何一方责任主体主张全部赔偿责任。如果您家庭先行承担了全部或超过自身责任比例的赔偿金额，有权向其他责任主体追偿。</p>
+                            
+                            <div class="grid md:grid-cols-2 gap-4 mt-4">
+                                <div class="bg-accent/20 p-3 rounded">
+                                    <p class="font-medium mb-2">您家庭的追偿权</p>
+                                    <p class="text-sm">若您家庭承担的赔偿金额超过自身责任比例（30%-40%），有权就超出部分向挂靠公司和工厂追偿。</p>
+                                </div>
+                                <div class="bg-accent/20 p-3 rounded">
+                                    <p class="font-medium mb-2">挂靠公司的责任</p>
+                                    <p class="text-sm">作为被挂靠单位，挂靠公司需对您家庭的经营活动承担连带责任，不能以仅收取挂靠费用为由拒绝承担责任。</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-primary/10 rounded-lg">
+                            <h4 class="font-semibold mb-2">实践建议：</h4>
+                            <ul class="space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fa fa-arrow-right text-primary mt-1 mr-2"></i>
+                                    <span>在诉讼中明确主张各方责任比例，避免单独承担全部责任</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-arrow-right text-primary mt-1 mr-2"></i>
+                                    <span>保留与挂靠公司的挂靠协议等证据，证明双方权利义务关系</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-arrow-right text-primary mt-1 mr-2"></i>
+                                    <span>如先行垫付了超过自身责任比例的赔偿款，应及时行使追偿权</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 五、诉讼策略与证据准备 -->
+        <section id="strategy" class="mb-16 scroll-mt-20">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 transition-all duration-300 hover:shadow-xl">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center mr-3">
+                        <i class="fa fa-legal"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-primary">五、诉讼策略与证据准备</h2>
+                </div>
+
+                <!-- 5.1 诉讼策略建议 -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">5.1</span>
+                        诉讼策略建议
+                    </h3>
+                    <div class="pl-10">
+                        <p class="mb-6">针对本案特点，建议采取以下诉讼策略：</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-white border border-accent rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <div class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3">
+                                    <i class="fa fa-users text-xl"></i>
+                                </div>
+                                <h4 class="font-semibold mb-2">追加共同被告</h4>
+                                <p class="text-sm">向法院申请追加挂靠公司和工厂作为共同被告，将责任风险分散，避免单独承担全部责任。</p>
+                            </div>
+                            
+                            <div class="bg-white border border-accent rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <div class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3">
+                                    <i class="fa fa-stethoscope text-xl"></i>
+                                </div>
+                                <h4 class="font-semibold mb-2">申请伤残鉴定</h4>
+                                <p class="text-sm">主动申请法院委托专业机构进行伤残等级及"三期"鉴定，以确定合理的赔偿金额。</p>
+                            </div>
+                            
+                            <div class="bg-white border border-accent rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <div class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3">
+                                    <i class="fa fa-balance-scale text-xl"></i>
+                                </div>
+                                <h4 class="font-semibold mb-2">主张过错责任</h4>
+                                <p class="text-sm">充分举证证明伤者自身存在重大过错（违规操作），争取降低己方责任比例。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-accent/30 p-4 rounded-lg mb-6">
+                            <h4 class="font-semibold mb-3">协商与诉讼相结合策略</h4>
+                            <p class="mb-3">在诉讼过程中，可同时尝试与伤者进行和解协商：</p>
+                            <ol class="list-decimal pl-5 space-y-2">
+                                <li>在法院主持下进行调解，提出合理的赔偿方案</li>
+                                <li>调解不成的，坚持通过司法鉴定确定合理赔偿金额</li>
+                                <li>强调各方责任，争取以较低成本解决纠纷</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="p-4 bg-primary/10 rounded-lg">
+                            <p class="font-medium">关键策略要点：</p>
+                            <ul class="space-y-1 mt-2 text-sm">
+                                <li class="flex items-start">
+                                    <i class="fa fa-check text-primary mt-1 mr-2"></i>
+                                    <span>不要轻易承认全部责任，强调多方责任主体</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check text-primary mt-1 mr-2"></i>
+                                    <span>对伤者提出的不合理赔偿项目和金额提出异议</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check text-primary mt-1 mr-2"></i>
+                                    <span>重视伤残鉴定程序，这是确定赔偿金额的关键</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5.2 证据准备清单 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">5.2</span>
+                        证据准备清单
+                    </h3>
+                    <div class="pl-10">
+                        <p class="mb-6">为支持己方主张，应准备以下几类证据：</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-3 flex items-center">
+                                    <i class="fa fa-file-text-o text-primary mr-2"></i>
+                                    主体资格与法律关系证据
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs mt-0.5 mr-3 flex-shrink-0">1</div>
+                                        <div>
+                                            <p class="font-medium">与挂靠公司的挂靠协议</p>
+                                            <p class="text-sm text-gray-600">证明挂靠关系及双方权利义务</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs mt-0.5 mr-3 flex-shrink-0">2</div>
+                                        <div>
+                                            <p class="font-medium">与工厂的业务往来凭证</p>
+                                            <p class="text-sm text-gray-600">包括费用账单、结算凭证等，证明承揽关系</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs mt-0.5 mr-3 flex-shrink-0">3</div>
+                                        <div>
+                                            <p class="font-medium">施工人员的来源证明</p>
+                                            <p class="text-sm text-gray-600">证明施工人员由挂靠公司介绍</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold text-lg mb-3 flex items-center">
+                                    <i class="fa fa-medkit text-primary mr-2"></i>
+                                    损害事实与赔偿证据
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs mt-0.5 mr-3 flex-shrink-0">1</div>
+                                        <div>
+                                            <p class="font-medium">医疗费用票据</p>
+                                            <p class="text-sm text-gray-600">已垫付的1万余元医药费凭证</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs mt-0.5 mr-3 flex-shrink-0">2</div>
+                                        <div>
+                                            <p class="font-medium">伤者病历资料</p>
+                                            <p class="text-sm text-gray-600">包括诊断证明、出院小结等，证明伤情</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs mt-0.5 mr-3 flex-shrink-0">3</div>
+                                        <div>
+                                            <p class="font-medium">现场情况证据</p>
+                                            <p class="text-sm text-gray-600">如现场照片、视频等，证明事故发生环境</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-3 flex items-center">
+                                    <i class="fa fa-exclamation-triangle text-primary mr-2"></i>
+                                    过错责任证据
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs mt-0.5 mr-3 flex-shrink-0">1</div>
+                                        <div>
+                                            <p class="font-medium">证人证言</p>
+                                            <p class="text-sm text-gray-600">其他在场施工人员关于伤者违规操作的证言</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs mt-0.5 mr-3 flex-shrink-0">2</div>
+                                        <div>
+                                            <p class="font-medium">安全措施证明</p>
+                                            <p class="text-sm text-gray-600">证明已提供必要的安全设备和防护措施</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold text-lg mb-3 flex items-center">
+                                    <i class="fa fa-handshake-o text-primary mr-2"></i>
+                                    其他相关证据
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs mt-0.5 mr-3 flex-shrink-0">1</div>
+                                        <div>
+                                            <p class="font-medium">沟通记录</p>
+                                            <p class="text-sm text-gray-600">与伤者家属、挂靠公司、工厂的沟通记录</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs mt-0.5 mr-3 flex-shrink-0">2</div>
+                                        <div>
+                                            <p class="font-medium">行业惯例证明</p>
+                                            <p class="text-sm text-gray-600">证明同类工程的安全管理标准和惯例</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 六、风险评估与应对措施 -->
+        <section id="risk" class="mb-16 scroll-mt-20">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 transition-all duration-300 hover:shadow-xl">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center mr-3">
+                        <i class="fa fa-exclamation-circle"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-primary">六、风险评估与应对措施</h2>
+                </div>
+
+                <!-- 6.1 主要法律风险 -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">6.1</span>
+                        主要法律风险
+                    </h3>
+                    <div class="pl-10">
+                        <p class="mb-6">本案中可能面临的主要法律风险如下：</p>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white border border-accent rounded-lg p-4">
+                                <div class="flex">
+                                    <div class="w-10 h-10 rounded-full bg-red-100 text-red-500 flex items-center justify-center mr-3 flex-shrink-0">
+                                        <i class="fa fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold mb-1">责任比例认定不利风险</h4>
+                                        <p class="text-sm">若法院认定您家庭责任比例较高（超过40%），将导致赔偿金额增加。主要原因可能是未能充分证明已采取安全措施和伤者存在重大过错。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border border-accent rounded-lg p-4">
+                                <div class="flex">
+                                    <div class="w-10 h-10 rounded-full bg-red-100 text-red-500 flex items-center justify-center mr-3 flex-shrink-0">
+                                        <i class="fa fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold mb-1">伤残等级高于预期风险</h4>
+                                        <p class="text-sm">若鉴定结果为九级或更高伤残，将导致残疾赔偿金大幅增加，整体赔偿金额可能超过预期。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border border-accent rounded-lg p-4">
+                                <div class="flex">
+                                    <div class="w-10 h-10 rounded-full bg-red-100 text-red-500 flex items-center justify-center mr-3 flex-shrink-0">
+                                        <i class="fa fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold mb-1">连带责任承担风险</h4>
+                                        <p class="text-sm">若挂靠公司或工厂无实际履行能力，法院可能判决您家庭承担全部赔偿责任，后续追偿可能存在困难。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border border-accent rounded-lg p-4">
+                                <div class="flex">
+                                    <div class="w-10 h-10 rounded-full bg-red-100 text-red-500 flex items-center justify-center mr-3 flex-shrink-0">
+                                        <i class="fa fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold mb-1">证据不足风险</h4>
+                                        <p class="text-sm">由于未签订正式合同，法律关系证明可能存在困难，若证据不足，可能导致责任认定不利。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6.2 风险应对措施 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">6.2</span>
+                        风险应对措施
+                    </h3>
+                    <div class="pl-10">
+                        <p class="mb-6">针对上述风险，建议采取以下应对措施：</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-accent/20 p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2 flex items-center">
+                                    <i class="fa fa-shield text-primary mr-2"></i>
+                                    针对责任比例风险
+                                </h4>
+                                <ul class="space-y-1 text-sm pl-6 list-disc">
+                                    <li>收集更多关于伤者违规操作的证据</li>
+                                    <li>寻找证人证明已提供安全指导和防护措施</li>
+                                    <li>提供同类工程的安全管理惯例作为参考</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-accent/20 p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2 flex items-center">
+                                    <i class="fa fa-shield text-primary mr-2"></i>
+                                    针对伤残等级风险
+                                </h4>
+                                <ul class="space-y-1 text-sm pl-6 list-disc">
+                                    <li>对鉴定意见进行充分质证，必要时申请重新鉴定</li>
+                                    <li>收集伤者康复情况的证据，证明伤情恢复良好</li>
+                                    <li>咨询专业医师，了解伤情可能的伤残等级范围</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-accent/20 p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2 flex items-center">
+                                    <i class="fa fa-shield text-primary mr-2"></i>
+                                    针对连带责任风险
+                                </h4>
+                                <ul class="space-y-1 text-sm pl-6 list-disc">
+                                    <li>在诉讼中强调各方责任，避免单独承担全部责任</li>
+                                    <li>调查挂靠公司和工厂的财产状况，评估其履行能力</li>
+                                    <li>准备好向其他责任主体追偿的证据材料</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-accent/20 p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2 flex items-center">
+                                    <i class="fa fa-shield text-primary mr-2"></i>
+                                    针对证据不足风险
+                                </h4>
+                                <ul class="space-y-1 text-sm pl-6 list-disc">
+                                    <li>尽可能收集补强证据，如沟通记录、证人证言等</li>
+                                    <li>申请法院调查取证，获取相关证据材料</li>
+                                    <li>通过逻辑推理和间接证据形成完整证据链</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 七、结论与建议 -->
+        <section id="conclusion" class="mb-16 scroll-mt-20">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 transition-all duration-300 hover:shadow-xl">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center mr-3">
+                        <i class="fa fa-check-square-o"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-primary">七、结论与建议</h2>
+                </div>
+
+                <!-- 7.1 案件结论 -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">7.1</span>
+                        案件结论
+                    </h3>
+                    <div class="pl-10">
+                        <div class="bg-accent/30 p-5 rounded-lg mb-6">
+                            <p class="mb-3">综合本案事实和法律分析，得出以下结论：</p>
+                            <ol class="list-decimal pl-5 space-y-2">
+                                <li>本案属于提供劳务者受害责任纠纷，适用过错责任原则</li>
+                                <li>您家庭、挂靠公司、工厂和伤者本人均可能承担相应责任</li>
+                                <li>伤者自身操作不当是事故发生的重要原因，应承担30%-40%的责任</li>
+                                <li>您家庭作为接受劳务一方，可能承担30%-40%的责任</li>
+                                <li>若不构成伤残，合理赔偿总额约为2-4万元（已扣除已垫付的1万元）</li>
+                                <li>若构成十级伤残，合理赔偿总额约为5-10万元（已扣除已垫付的1万元）</li>
+                                <li>伤者家属提出的20余万元赔偿要求明显偏高，缺乏法律依据</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7.2 具体建议 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-dark mb-4 flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-secondary/20 text-secondary flex items-center justify-center mr-2 text-sm">7.2</span>
+                        具体建议
+                    </h3>
+                    <div class="pl-10">
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <h4 class="font-semibold text-lg mb-3">诉讼程序建议</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                                        <span>及时聘请专业律师代理案件，制定详细诉讼策略</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                                        <span>向法院申请追加挂靠公司和工厂作为共同被告</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                                        <span>申请法院委托专业机构进行伤残等级及"三期"鉴定</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                                        <span>积极参与法庭调解，争取以合理金额解决纠纷</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold text-lg mb-3">证据收集建议</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                                        <span>收集能证明伤者违规操作的证据，包括证人证言</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                                        <span>整理与挂靠公司的协议及往来记录，证明挂靠关系</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                                        <span>收集已垫付医疗费用的凭证，作为抵扣依据</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                                        <span>准备能证明已提供安全措施的相关证据</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="p-5 bg-primary text-white rounded-lg">
+                            <h4 class="font-semibold text-lg mb-3">后续经营风险防范建议</h4>
+                            <ul class="space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fa fa-arrow-right mt-1 mr-2"></i>
+                                    <span>完善合同管理，与合作方签订正式书面合同</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-arrow-right mt-1 mr-2"></i>
+                                    <span>为施工人员购买意外伤害保险，降低赔偿风险</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-arrow-right mt-1 mr-2"></i>
+                                    <span>加强施工现场安全管理，定期进行安全教育培训</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-arrow-right mt-1 mr-2"></i>
+                                    <span>规范与挂靠公司的合作关系，明确安全管理责任</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-primary text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-2 flex items-center">
+                        <i class="fa fa-gavel mr-2"></i>法律分析报告
+                    </h3>
+                    <p class="text-white/80 text-sm">提供劳务者受害责任纠纷专业分析</p>
+                </div>
+                
+                <div class="text-center md:text-right">
+                    <p class="text-white/80 text-sm">本报告仅供参考，不构成法律意见</p>
+                    <p class="text-white/80 text-sm mt-1">具体法律问题请咨询专业律师</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 移动端菜单切换
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('py-2', 'shadow-lg');
+                header.classList.remove('py-3', 'shadow-md');
+            } else {
+                header.classList.add('py-3', 'shadow-md');
+                header.classList.remove('py-2', 'shadow-lg');
+            }
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                // 关闭移动端菜单
+                document.getElementById('mobileMenu').classList.add('hidden');
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 更新导航激活状态
+                    document.querySelectorAll('nav a').forEach(link => {
+                        link.classList.remove('nav-active');
+                    });
+                    this.classList.add('nav-active');
+                }
+            });
+        });
+
+        // 责任比例图表
+        window.addEventListener('load', function() {
+            const ctx = document.getElementById('liabilityChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['伤者自身', '您家庭', '挂靠公司', '工厂'],
+                    datasets: [{
+                        data: [38, 35, 17, 10],
+                        backgroundColor: [
+                            '#ef4444', // 红色 - 伤者自身
+                            '#1e40af', // 深蓝色 - 您家庭
+                            '#3b82f6', // 中蓝色 - 挂靠公司
+                            '#60a5fa'  // 浅蓝色 - 工厂
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        // 为每个部分添加进入动画
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-4');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section > div').forEach(section => {
+            section.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-4');
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
