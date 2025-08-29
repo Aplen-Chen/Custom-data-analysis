@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smile視頻號8月數據復盤與9月策略建議</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 優先加載Chart.js確保圖表正常顯示 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563EB',
+                        secondary: '#3B82F6',
+                        accent: '#93C5FD',
+                        dark: '#1E293B',
+                        light: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .section-active {
+                @apply bg-primary text-white;
+            }
+            .card {
+                @apply bg-white rounded-xl shadow-md p-4 mb-5 transition-all duration-300 hover:shadow-lg;
+            }
+            .badge {
+                @apply inline-block px-2 py-1 text-xs rounded-full bg-accent text-white;
+            }
+            .badge-success {
+                @apply bg-green-100 text-green-800;
+            }
+            .badge-warning {
+                @apply bg-yellow-100 text-yellow-800;
+            }
+            .badge-danger {
+                @apply bg-red-100 text-red-800;
+            }
+            .section-content {
+                display: none;
+            }
+            .section-content.active {
+                display: block;
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .bottom-nav {
+                @apply fixed bottom-0 left-0 right-0 bg-white shadow-lg z-40;
+            }
+            .bottom-nav-item {
+                @apply flex-1 text-center py-3 flex flex-col items-center justify-center text-xs;
+            }
+            /* 圖表容器優化，確保足夠空間顯示 */
+            .chart-container {
+                position: relative;
+                width: 100%;
+                height: 240px;
+                margin: 0 auto 1rem;
+                padding: 10px 0;
+            }
+            .step-item {
+                @apply border-l-2 border-gray-200 pl-4 py-2 ml-3 relative;
+            }
+            .step-item:before {
+                content: '';
+                @apply absolute w-3 h-3 rounded-full bg-primary -left-[7px] top-3;
+            }
+            .step-item:last-child {
+                @apply border-l-2 border-gray-100;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-dark pb-20">
+    <!-- 頂部標題欄 -->
+    <header class="bg-primary text-white py-4 px-5 sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-[clamp(1.2rem,5vw,1.6rem)] font-bold">Smile視頻號數據分析</h1>
+            <div class="flex items-center space-x-2">
+                <span class="text-xs bg-white/20 px-2 py-1 rounded-full">
+                    <i class="fa fa-calendar mr-1"></i> 2025.8-9
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主內容區 -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- 核心發現 -->
+        <div class="bg-blue-50 rounded-lg border border-blue-100 p-4 mb-5">
+            <h3 class="font-bold mb-2 text-primary text-base">核心發現</h3>
+            <ul class="space-y-2 text-xs">
+                <li class="flex items-start">
+                    <i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <span>公益情感類內容分享率最高，平均分享數達點讚數50%以上</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <span>沙漠挑戰系列完播率最優（Day1達13.46%），證明內容黏性強</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fa fa-exclamation-triangle text-yellow-500 mt-1 mr-2"></i>
+                    <span>3秒留存率普遍偏低（多數60%-69%），開頭留客能力不足</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fa fa-exclamation-triangle text-yellow-500 mt-1 mr-2"></i>
+                    <span>互動引導缺失，多數視頻評論數僅個位數，未有效轉化觀眾參與</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 內容區 -->
+        <div class="w-full">
+            <!-- 1. 整體趨勢總結 -->
+            <section id="section1" class="section-content active">
+                <div class="card">
+                    <h2 class="text-xl font-bold mb-4 text-primary flex items-center">
+                        <i class="fa fa-line-chart mr-2 text-2xl"></i>整體趨勢總結
+                    </h2>
+                    
+                    <div class="space-y-4 text-sm">
+                        <p>8月整體視頻呈現「開頭弱、內核強」的趨勢：多數影片前三秒大量觀眾流失，導致完播率普遍偏低。例如部分影片僅約2-5%的觀眾看完，但留下來的人平均觀看了影片60-75%的時長，證明內容本身有吸引力，但開場未有效留住用戶。</p>
+                        
+                        <!-- 內容類型表現對比圖 -->
+                        <div class="grid grid-cols-1 gap-4 mt-5">
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <h4 class="font-bold mb-2 text-gray-700 text-sm">內容類型表現對比</h4>
+                                <div class="chart-container">
+                                    <canvas id="contentTypeChart"></canvas>
+                                </div>
+                                <p class="text-xs text-gray-500 text-center mt-1">不同類型視頻的完播率與3秒留存率比較</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 space-y-3">
+                            <div class="flex items-start">
+                                <i class="fa fa-heart text-red-500 mt-1 mr-2"></i>
+                                <p><strong>情感故事/公益類</strong>：分享率最高，觀眾願意主動轉發（如寵物寫真影片分享數36，遠高於評論6），社交傳播力強</p>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fa fa-lightbulb-o text-yellow-500 mt-1 mr-2"></i>
+                                <p><strong>商業/個人故事類</strong>：以物換物挑戰播放量突破1.1萬，創意主題帶來高點擊，但完播率僅5.03%，開頭留客不足</p>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fa fa-play-circle text-green-500 mt-1 mr-2"></i>
+                                <p><strong>挑戰vlog類</strong>：核心粉絲完播率高（沙漠Day1達13.46%），但系列播放量逐漸下滑，缺乏破圈吸引力</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-red-50 p-3 rounded-lg border border-red-100 mt-4">
+                            <h4 class="font-bold mb-2 text-red-700 text-sm">主要痛點</h4>
+                            <p class="text-xs">觀眾流失最嚴重環節：<strong>開頭3秒（30%-50%用戶滑走）</strong> → 中段節奏平淡處 → 長時長內容後半段。「黃金3秒」設計和中段節奏是目前最大瓶頸。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 月度數據走勢 -->
+                <div class="card">
+                    <h3 class="text-lg font-bold mb-3 text-primary">8月視頻表現走勢</h3>
+                    <div class="chart-container">
+                        <canvas id="monthlyTrendChart"></canvas>
+                    </div>
+                    <div class="mt-3 text-xs text-gray-600">
+                        <p><i class="fa fa-info-circle text-blue-500 mr-1"></i> 數據顯示中旬出現播放量高峰，與沙漠挑戰系列上線時間吻合，但後續未能持續增長，反映內容更新頻率和話題延續性需加強。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. 各視頻分項數據診斷 -->
+            <section id="section2" class="section-content">
+                <div class="card">
+                    <h2 class="text-xl font-bold mb-4 text-primary flex items-center">
+                        <i class="fa fa-film mr-2 text-2xl"></i>各視頻分項數據診斷
+                    </h2>
+                    
+                    <!-- 數據表格 -->
+                    <div class="overflow-x-auto mb-6">
+                        <table class="w-full text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="px-2 py-2 text-left border-b">視頻主題</th>
+                                    <th class="px-2 py-2 text-center border-b">播放量</th>
+                                    <th class="px-2 py-2 text-center border-b">完播率</th>
+                                    <th class="px-2 py-2 text-center border-b">3秒留存</th>
+                                    <th class="px-2 py-2 text-center border-b">分享數</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-2 py-2 border-b">不想再留有遺憾（寵物寫真）</td>
+                                    <td class="px-2 py-2 text-center border-b">5,586</td>
+                                    <td class="px-2 py-2 text-center border-b text-red-500">2.97%</td>
+                                    <td class="px-2 py-2 text-center border-b">62.49%</td>
+                                    <td class="px-2 py-2 text-center border-b text-green-500">36</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-2 py-2 border-b">帶娃街拍萌寵挑戰</td>
+                                    <td class="px-2 py-2 text-center border-b">3,524</td>
+                                    <td class="px-2 py-2 text-center border-b text-green-500">9.71%</td>
+                                    <td class="px-2 py-2 text-center border-b">69.38%</td>
+                                    <td class="px-2 py-2 text-center border-b">–</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-2 py-2 border-b">沙漠攝影團 Day1</td>
+                                    <td class="px-2 py-2 text-center border-b">1,553</td>
+                                    <td class="px-2 py-2 text-center border-b text-green-500">13.46%</td>
+                                    <td class="px-2 py-2 text-center border-b">66.48%</td>
+                                    <td class="px-2 py-2 text-center border-b">–</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-2 py-2 border-b">以物換物挑戰</td>
+                                    <td class="px-2 py-2 text-center border-b text-green-500">11,891</td>
+                                    <td class="px-2 py-2 text-center border-b text-red-500">5.03%</td>
+                                    <td class="px-2 py-2 text-center border-b text-red-500">48.54%</td>
+                                    <td class="px-2 py-2 text-center border-b">–</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-2 py-2 border-b">銀髮姐姐逆齡寫真</td>
+                                    <td class="px-2 py-2 text-center border-b">2,603</td>
+                                    <td class="px-2 py-2 text-center border-b">7.22%</td>
+                                    <td class="px-2 py-2 text-center border-b">61.89%</td>
+                                    <td class="px-2 py-2 text-center border-b">–</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-2 py-2 border-b">我為何成為寵物攝影師</td>
+                                    <td class="px-2 py-2 text-center border-b">6,407</td>
+                                    <td class="px-2 py-2 text-center border-b text-red-500">2.95%</td>
+                                    <td class="px-2 py-2 text-center border-b text-green-500">73.97%</td>
+                                    <td class="px-2 py-2 text-center border-b">–</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- 重點視頻分析 -->
+                    <div class="space-y-5">
+                        <!-- 視頻1：以物換物 -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="font-bold text-sm">以物換物挑戰（播放量最高）</h3>
+                                <span class="badge">商業創意類</span>
+                            </div>
+                            <div class="grid grid-cols-1 gap-3">
+                                <div>
+                                    <h4 class="font-bold mb-1 text-gray-700 text-xs">亮點分析</h4>
+                                    <p class="text-xs">創意主題搭配優秀封面標題，播放量突破1.1萬，留下的用戶平均觀看76%時長（136.5秒），內容黏著度高</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1 text-gray-700 text-xs">問題診斷</h4>
+                                    <p class="text-xs text-red-500">開頭與標題預期落差大，超51%用戶3秒內退出，完播率僅5.03%，高開低走現象明顯</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1 text-gray-700 text-xs">優化建議</h4>
+                                    <ul class="text-xs space-y-1">
+                                        <li>• 開頭0-3秒：快速閃現戰利品桌子+路人驚喜反應特寫</li>
+                                        <li>• 字幕強化："0成本換到iPhone？最後結果嚇到我！"</li>
+                                        <li>• 節奏調整：每15秒設置一個驚喜交換，保持觀眾期待感</li>
+                                        <li>• 互動設計：30秒處插入提問"如果你有這個，會換什麼？"</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 視頻2：銀髮姐姐 -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="font-bold text-sm">銀髮姐姐逆齡寫真（互動最佳）</h3>
+                                <span class="badge">公益類</span>
+                            </div>
+                            <div class="grid grid-cols-1 gap-3">
+                                <div>
+                                    <h4 class="font-bold mb-1 text-gray-700 text-xs">亮點分析</h4>
+                                    <p class="text-xs">情感價值突出，點讚、分享率均遠高於平均，3分13秒長視頻平均觀看124.8秒（65%），核心用戶認可度高</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1 text-gray-700 text-xs">問題診斷</h4>
+                                    <p class="text-xs text-red-500">開頭「第三齡青春計劃」口號式設計乏力，3秒內流失38%觀眾，標題封面吸引力不足</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1 text-gray-700 text-xs">優化建議</h4>
+                                    <ul class="text-xs space-y-1">
+                                        <li>• 開場設計：改造前後對比照快速切換（0.5秒/張）共4張</li>
+                                        <li>• 字幕設計："58歲→28歲？銀髮姐姐的逆襲驚呆全場！"</li>
+                                        <li>• 故事重組：先展示改造過程（15秒），再講述背後故事</li>
+                                        <li>• 結尾引導："你身邊有這樣精彩的銀髮族嗎？評論區告訴我"</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 視頻3：沙漠攝影團 -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="font-bold text-sm">沙漠攝影團 Day1（完播率最高）</h3>
+                                <span class="badge">挑戰vlog類</span>
+                            </div>
+                            <div class="grid grid-cols-1 gap-3">
+                                <div>
+                                    <h4 class="font-bold mb-1 text-gray-700 text-xs">亮點分析</h4>
+                                    <p class="text-xs">完播率13.46%領先其他視頻，核心粉絲忠誠度高，內容連續性強，用戶期待後續發展</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1 text-gray-700 text-xs">問題診斷</h4>
+                                    <p class="text-xs text-red-500">開場節奏緩慢，導入場景過長（15秒才進入主題），系列播放量逐漸下滑</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1 text-gray-700 text-xs">優化建議</h4>
+                                    <ul class="text-xs space-y-1">
+                                        <li>• 開場壓縮：3秒內展示沙漠壯麗全景+驚喜表情特寫</li>
+                                        <li>• 懸念設置：開頭字幕"我們在沙漠遇到了駱駝隊？最後竟..."</li>
+                                        <li>• 系列銜接：每集結尾10秒預告下集精彩內容</li>
+                                        <li>• 互動任務："猜猜我們明天會拍到什麼？留言有機會被回應"</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 觀眾留存曲線比較 -->
+                <div class="card mt-5">
+                    <h3 class="text-lg font-bold mb-3 text-primary">熱門視頻留存曲線對比</h3>
+                    <div class="chart-container">
+                        <canvas id="retentionComparisonChart"></canvas>
+                    </div>
+                    <div class="mt-3 grid grid-cols-1 gap-2 text-xs">
+                        <p><i class="fa fa-info-circle text-blue-500 mr-1"></i> 曲線顯示：沙漠攝影團的留存曲線最平緩，觀眾忠誠度高；以物換物挑戰開頭流失最快。</p>
+                        <p><i class="fa fa-info-circle text-blue-500 mr-1"></i> 共同點：所有視頻在中後段（60-80%處）均出現明顯流失，反映中段內容吸引力需加強。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. 9月策略建議 -->
+            <section id="section3" class="section-content">
+                <div class="card">
+                    <h2 class="text-xl font-bold mb-4 text-primary flex items-center">
+                        <i class="fa fa-lightbulb-o mr-2 text-2xl"></i>9月內容策略建議
+                    </h2>
+                    
+                    <!-- 三大核心策略 -->
+                    <div class="space-y-5 mb-6">
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                            <h3 class="font-bold text-base text-primary mb-3 flex items-center">
+                                <i class="fa fa-fire text-yellow-500 mr-2"></i>策略一：黃金3秒革命計劃
+                            </h3>
+                            <div class="mb-3">
+                                <h4 class="font-bold text-sm text-blue-800 mb-2">實施步驟</h4>
+                                <div class="space-y-3">
+                                    <div class="step-item">
+                                        <p class="font-bold text-xs">1. 開場類型分類（9/1-9/5完成）</p>
+                                        <p class="text-xs">根據視頻類型確定開場模式：<br>
+                                        - 情感類：對比畫面衝擊（如銀髮姐姐改造前後）<br>
+                                        - 挑戰類：懸念式開場（如"我們在沙漠遇到了..."）<br>
+                                        - 教學類：價值直接展示（如"3秒學會寵物拍照技巧"）</p>
+                                    </div>
+                                    <div class="step-item">
+                                        <p class="font-bold text-xs">2. 字幕強化標準（9/6開始執行）</p>
+                                        <p class="text-xs">統一字幕規範：<br>
+                                        - 字體大小：占屏幕1/8高度<br>
+                                        - 字體顏色：與背景形成強烈對比<br>
+                                        - 內容要求：包含數字或疑問句增加吸引力</p>
+                                    </div>
+                                    <div class="step-item">
+                                        <p class="font-bold text-xs">3. A/B測試機制（全月實施）</p>
+                                        <p class="text-xs">每個主題製作2種開場版本，根據數據選擇最佳方案，每周總結一次成功模式</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-blue-800 mb-2">預期效果</h4>
+                                <p class="text-xs">3秒留存率從平均65%提升至75%以上，整體完播率提升40%，每日額外獲得2000+有效觀看</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                            <h3 class="font-bold text-base text-green-700 mb-3 flex items-center">
+                                <i class="fa fa-refresh text-green-600 mr-2"></i>策略二：系列內容升級
+                            </h3>
+                            <div class="mb-3">
+                                <h4 class="font-bold text-sm text-green-800 mb-2">具體系列策劃</h4>
+                                <div class="space-y-4">
+                                    <div>
+                                        <p class="font-bold text-xs">1. 沙漠生存技能系列（9/1-9/7）</p>
+                                        <ul class="text-xs pl-4 space-y-1 list-disc">
+                                            <li>每集30-45秒，聚焦一個實用技巧</li>
+                                            <li>標題格式："沙漠攝影必學！手機拍出星空大片"</li>
+                                            <li>結尾引導："想知道如何在沙漠保護相機？關注看下集"</li>
+                                            <li>更新頻率：每日1條，共7條</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-xs">2. 寵物攝影師IP化（9/8-9/21）</p>
+                                        <ul class="text-xs pl-4 space-y-1 list-disc">
+                                            <li>建立"阿明寵攝"個人形象，統一開場口號</li>
+                                            <li>內容模塊：技巧教學（60%）+ 幕後故事（30%）+ 粉絲互動（10%）</li>
+                                            <li>每周一個主題（如"貓咪拍攝"、"狗狗戶外"等）</li>
+                                            <li>更新頻率：每周3條，共6條</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-green-800 mb-2">預期效果</h4>
+                                <p class="text-xs">粉絲增長率提升50%，系列視頻間用戶轉化率達30%，用戶留存時間延長25%</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                            <h3 class="font-bold text-base text-purple-700 mb-3 flex items-center">
+                                <i class="fa fa-comments text-purple-600 mr-2"></i>策略三：互動體系構建
+                            </h3>
+                            <div class="mb-3">
+                                <h4 class="font-bold text-sm text-purple-800 mb-2">互動設計標準</h4>
+                                <div class="space-y-3">
+                                    <div class="step-item">
+                                        <p class="font-bold text-xs">1. 視頻內互動點（強制要求）</p>
+                                        <p class="text-xs">每個視頻必須包含：<br>
+                                        - 1個口頭提問（如"你覺得哪張最動人？"）<br>
+                                        - 1個文字引導（屏幕底部固定位置顯示）<br>
+                                        - 1個結尾互動（如"歡迎在評論區分享你的故事"）</p>
+                                    </div>
+                                    <div class="step-item">
+                                        <p class="font-bold text-xs">2. 評論回復機制</p>
+                                        <p class="text-xs">建立標準回復流程：<br>
+                                        - 24小時內回復所有評論<br>
+                                        - 挑選3-5條優質評論進行精選展示<br>
+                                        - 每周選取1個用戶建議進行內容回應</p>
+                                    </div>
+                                    <div class="step-item">
+                                        <p class="font-bold text-xs">3. 用戶內容徵集</p>
+                                        <p class="text-xs">啟動"粉絲故事計劃"：<br>
+                                        - 徵集用戶與寵物/家人的故事<br>
+                                        - 優質故事由團隊拍攝成視頻<br>
+                                        - 當事人參與互動，增強社群歸屬感</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-purple-800 mb-2">預期效果</h4>
+                                <p class="text-xs">單條視頻評論數從平均5條提升至20條以上，用戶參與率提升300%，二次傳播率提升50%</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 9月內容排期計劃 -->
+                    <div class="card">
+                        <h3 class="text-lg font-bold mb-3 text-primary">9月內容排期規劃</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-xs border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="px-2 py-2 text-center border-b">周次</th>
+                                        <th class="px-2 py-2 text-center border-b">主推系列</th>
+                                        <th class="px-2 py-2 text-center border-b">更新頻率</th>
+                                        <th class="px-2 py-2 text-center border-b">核心目標</th>
+                                        <th class="px-2 py-2 text-center border-b">關鍵指標</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-2 py-2 text-center border-b">第1周</td>
+                                        <td class="px-2 py-2 text-center border-b">沙漠生存技能</td>
+                                        <td class="px-2 py-2 text-center border-b">3條/周</td>
+                                        <td class="px-2 py-2 text-center border-b">提升完播率至15%</td>
+                                        <td class="px-2 py-2 text-center border-b">
+                                            <span class="badge badge-success">完播率</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-2 py-2 text-center border-b">第2周</td>
+                                        <td class="px-2 py-2 text-center border-b">寵物攝影技巧</td>
+                                        <td class="px-2 py-2 text-center border-b">3條/周</td>
+                                        <td class="px-2 py-2 text-center border-b">提升分享率至2%</td>
+                                        <td class="px-2 py-2 text-center border-b">
+                                            <span class="badge badge-success">分享率</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-2 py-2 text-center border-b">第3周</td>
+                                        <td class="px-2 py-2 text-center border-b">銀髮時尚改造</td>
+                                        <td class="px-2 py-2 text-center border-b">2條/周</td>
+                                        <td class="px-2 py-2 text-center border-b">提升3秒留存至75%</td>
+                                        <td class="px-2 py-2 text-center border-b">
+                                            <span class="badge badge-warning">3秒留存</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-2 py-2 text-center border-b">第4周</td>
+                                        <td class="px-2 py-2 text-center border-b">用戶故事精選</td>
+                                        <td class="px-2 py-2 text-center border-b">2條/周</td>
+                                        <td class="px-2 py-2 text-center border-b">提升評論數至20+/條</td>
+                                        <td class="px-2 py-2 text-center border-b">
+                                            <span class="badge badge-danger">評論數</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- 每周重點任務 -->
+                        <div class="mt-4 bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-bold text-sm mb-2">每周重點任務分解</h4>
+                            <div class="grid grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <p class="font-bold text-primary">第1周</p>
+                                    <ul class="list-disc pl-4 space-y-1">
+                                        <li>完成沙漠系列腳本策劃</li>
+                                        <li>製作2種開場A/B測試版本</li>
+                                        <li>建立評論回復標準模板</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-primary">第2周</p>
+                                    <ul class="list-disc pl-4 space-y-1">
+                                        <li>拍攝6個寵物攝影技巧</li>
+                                        <li>啟動粉絲故事徵集活動</li>
+                                        <li>分析第1周數據，調整策略</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-primary">第3周</p>
+                                    <ul class="list-disc pl-4 space-y-1">
+                                        <li>完成2位銀髮模特拍攝</li>
+                                        <li>開展開場優化效果檢討</li>
+                                        <li>準備用戶故事拍攝計劃</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-primary">第4周</p>
+                                    <ul class="list-disc pl-4 space-y-1">
+                                        <li>拍攝並剪輯用戶故事</li>
+                                        <li>舉行9月數據檢討會議</li>
+                                        <li>制定10月內容初步計劃</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. 數據指標目標對比 -->
+            <section id="section4" class="section-content">
+                <div class="card">
+                    <h2 class="text-xl font-bold mb-4 text-primary flex items-center">
+                        <i class="fa fa-bullseye mr-2 text-2xl"></i>數據指標目標對比
+                    </h2>
+                    
+                    <!-- 8月表現與9月目標對比圖 -->
+                    <div class="mb-6">
+                        <h3 class="text-base font-bold mb-3">核心指標改善目標</h3>
+                        <div class="chart-container">
+                            <canvas id="goalsComparisonChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- 各項指標詳細分析 -->
+                    <div class="space-y-5">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="font-bold text-sm mb-2 flex items-center">
+                                <i class="fa fa-play-circle text-primary mr-2"></i>播放量提升策略
+                            </h3>
+                            <div class="grid grid-cols-1 gap-3 text-xs">
+                                <p><strong>• 現狀</strong>：平均4,927次播放</p>
+                                <p><strong>• 目標</strong>：提升至8,000+（+62%）</p>
+                                <p><strong>• 具體措施</strong>：</p>
+                                <ul class="list-disc pl-4 space-y-1">
+                                    <li>標題優化：包含數字、疑問句和熱門詞彙</li>
+                                    <li>封面升級：統一風格，增加文字標題，使用高對比度色彩</li>
+                                    <li>時機選擇：根據8月數據，最佳發布時間為19:00-21:00</li>
+                                    <li>交叉推廣：每條視頻末尾引導關注其他系列內容</li>
+                                </ul>
+                                <p><strong>• 衡量標準</strong>：每周播放量增長15%以上，月末達到目標值</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="font-bold text-sm mb-2 flex items-center">
+                                <i class="fa fa-check-square-o text-primary mr-2"></i>完播率提升策略
+                            </h3>
+                            <div class="grid grid-cols-1 gap-3 text-xs">
+                                <p><strong>• 現狀</strong>：平均7.22%完播率</p>
+                                <p><strong>• 目標</strong>：提升至12%（+66%）</p>
+                                <p><strong>• 具體措施</strong>：</p>
+                                <ul class="list-disc pl-4 space-y-1">
+                                    <li>時長控制：多數視頻控制在60秒以內，最長不超過90秒</li>
+                                    <li>節奏設計：每15秒設置一個信息點或轉折點</li>
+                                    <li>結構優化：採用"開頭驚喜-中間展開-結尾互動"三段式結構</li>
+                                    <li>內容精簡：刪除多餘鏡頭，每個畫面都有存在價值</li>
+                                </ul>
+                                <p><strong>• 衡量標準</strong>：每周完播率提升10%，第四周達到12%目標</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="font-bold text-sm mb-2 flex items-center">
+                                <i class="fa fa-comments-o text-primary mr-2"></i>互動指標提升策略
+                            </h3>
+                            <div class="grid grid-cols-1 gap-3 text-xs">
+                                <p><strong>• 現狀</strong>：平均每條視頻5條評論，分享率1%</p>
+                                <p><strong>• 目標</strong>：評論20+，分享率2%（+100%）</p>
+                                <p><strong>• 具體措施</strong>：</p>
+                                <ul class="list-disc pl-4 space-y-1">
+                                    <li>評論引導：設計開放式問題，避免"是/否"封閉式問題</li>
+                                    <li>分享激勵：提供實用價值（如"分享領取寵物拍攝指南"）</li>
+                                    <li>回應機制：團隊成員每日固定時間回復評論</li>
+                                    <li>話題策劃：結合節日、熱點設計互動話題</li>
+                                </ul>
+                                <p><strong>• 衡量標準</strong>：每周評論數增長30%，月末達到目標值</p>
+                            </div>
+                        </div>
+                        
+                        <!-- 實施跟蹤表 -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3">
+                            <h3 class="font-bold text-sm mb-3">9月指標跟蹤表</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-xs border-collapse">
+                                    <thead>
+                                        <tr class="bg-gray-100">
+                                            <th class="px-2 py-2 text-center border-b">指標</th>
+                                            <th class="px-2 py-2 text-center border-b">8月基線</th>
+                                            <th class="px-2 py-2 text-center border-b">9月目標</th>
+                                            <th class="px-2 py-2 text-center border-b">負責人</th>
+                                            <th class="px-2 py-2 text-center border-b">跟蹤頻率</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-2 py-2 border-b">平均播放量</td>
+                                            <td class="px-2 py-2 text-center border-b">4,927</td>
+                                            <td class="px-2 py-2 text-center border-b">8,000+</td>
+                                            <td class="px-2 py-2 text-center border-b">市場部</td>
+                                            <td class="px-2 py-2 text-center border-b">每日</td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-2 py-2 border-b">平均完播率</td>
+                                            <td class="px-2 py-2 text-center border-b">7.22%</td>
+                                            <td class="px-2 py-2 text-center border-b">12%</td>
+                                            <td class="px-2 py-2 text-center border-b">內容部</td>
+                                            <td class="px-2 py-2 text-center border-b">每3天</td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-2 py-2 border-b">3秒留存率</td>
+                                            <td class="px-2 py-2 text-center border-b">65%</td>
+                                            <td class="px-2 py-2 text-center border-b">75%</td>
+                                            <td class="px-2 py-2 text-center border-b">剪輯師</td>
+                                            <td class="px-2 py-2 text-center border-b">每3天</td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-2 py-2 border-b">平均評論數</td>
+                                            <td class="px-2 py-2 text-center border-b">5</td>
+                                            <td class="px-2 py-2 text-center border-b">20+</td>
+                                            <td class="px-2 py-2 text-center border-b">社群運營</td>
+                                            <td class="px-2 py-2 text-center border-b">每日</td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-2 py-2 border-b">分享率</td>
+                                            <td class="px-2 py-2 text-center border-b">1%</td>
+                                            <td class="px-2 py-2 text-center border-b">2%</td>
+                                            <td class="px-2 py-2 text-center border-b">市場部</td>
+                                            <td class="px-2 py-2 text-center border-b">每周</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 底部導航欄 -->
+    <nav class="bottom-nav">
+        <div class="flex">
+            <div class="bottom-nav-item section-active" data-section="section1">
+                <i class="fa fa-line-chart text-lg mb-1"></i>
+                <span>整體趨勢</span>
+            </div>
+            <div class="bottom-nav-item" data-section="section2">
+                <i class="fa fa-film text-lg mb-1"></i>
+                <span>視頻分析</span>
+            </div>
+            <div class="bottom-nav-item" data-section="section3">
+                <i class="fa fa-lightbulb-o text-lg mb-1"></i>
+                <span>策略建議</span>
+            </div>
+            <div class="bottom-nav-item" data-section="section4">
+                <i class="fa fa-bullseye text-lg mb-1"></i>
+                <span>目標追蹤</span>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        // 確保頁面完全加載後再初始化圖表
+        document.addEventListener('DOMContentLoaded', function() {
+            // 導航切換功能
+            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const sectionId = this.getAttribute('data-section');
+                    
+                    // 隱藏所有內容
+                    document.querySelectorAll('.section-content').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // 顯示選中內容
+                    document.getElementById(sectionId).classList.add('active');
+                    
+                    // 更新導航樣式
+                    document.querySelectorAll('.bottom-nav-item').forEach(nav => {
+                        nav.classList.remove('section-active');
+                    });
+                    this.classList.add('section-active');
+                    
+                    // 滾動到頂部
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
+                    // 切換時重新繪製圖表，解決顯示問題
+                    setTimeout(initCharts, 100);
+                });
+            });
+
+            // 初始化圖表
+            initCharts();
+        });
+
+        // 圖表初始化函數 - 修復顯示問題
+        function initCharts() {
+            // 先銷毀所有現有圖表，防止重複創建
+            destroyAllCharts();
+            
+            // 1. 內容類型表現對比圖
+            const contentTypeCtx = document.getElementById('contentTypeChart');
+            if (contentTypeCtx) {
+                new Chart(contentTypeCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['情感公益類', '商業創意類', '挑戰vlog類', '個人故事類'],
+                        datasets: [
+                            {
+                                label: '平均完播率 (%)',
+                                data: [5.1, 5.03, 9.8, 2.95],
+                                backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                                borderColor: 'rgb(59, 130, 246)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: '3秒留存率 (%)',
+                                data: [62.5, 48.5, 66.5, 74.0],
+                                backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                                borderColor: 'rgb(16, 185, 129)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: getChartOptions()
+                });
+            }
+            
+            // 2. 月度趨勢圖
+            const monthlyTrendCtx = document.getElementById('monthlyTrendChart');
+            if (monthlyTrendCtx) {
+                new Chart(monthlyTrendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['8/1', '8/5', '8/10', '8/15', '8/20', '8/25', '8/30'],
+                        datasets: [{
+                            label: '每日播放量',
+                            data: [3200, 4500, 1553, 11891, 5586, 3524, 2603],
+                            borderColor: '#2563EB',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: getChartOptions()
+                });
+            }
+            
+            // 3. 留存曲線對比圖
+            const retentionCtx = document.getElementById('retentionComparisonChart');
+            if (retentionCtx) {
+                new Chart(retentionCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['0%', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'],
+                        datasets: [
+                            {
+                                label: '沙漠攝影團',
+                                data: [100, 92, 88, 85, 82, 79, 76, 73, 70, 68, 13.46],
+                                borderColor: '#2563EB',
+                                tension: 0.4,
+                                borderWidth: 2
+                            },
+                            {
+                                label: '以物換物挑戰',
+                                data: [100, 65, 58, 55, 52, 49, 45, 40, 35, 30, 5.03],
+                                borderColor: '#EF4444',
+                                tension: 0.4,
+                                borderWidth: 2
+                            },
+                            {
+                                label: '銀髮姐姐寫真',
+                                data: [100, 75, 70, 68, 65, 62, 59, 55, 50, 45, 7.22],
+                                borderColor: '#F59E0B',
+                                tension: 0.4,
+                                borderWidth: 2
+                            }
+                        ]
+                    },
+                    options: getChartOptions('留存率 (%)', '視頻進度')
+                });
+            }
+            
+            // 4. 目標對比雷達圖
+            const goalsCtx = document.getElementById('goalsComparisonChart');
+            if (goalsCtx) {
+                new Chart(goalsCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['播放量', '完播率', '3秒留存', '評論數', '分享數'],
+                        datasets: [
+                            {
+                                label: '8月表現',
+                                data: [61.6, 60.2, 87.2, 21.3, 48],
+                                backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                                borderColor: 'rgb(37, 99, 235)',
+                                pointBackgroundColor: 'rgb(37, 99, 235)',
+                                pointBorderColor: '#fff',
+                                pointRadius: 4
+                            },
+                            {
+                                label: '9月目標',
+                                data: [100, 100, 100, 100, 100],
+                                backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                                borderColor: 'rgb(16, 185, 129)',
+                                pointBackgroundColor: 'rgb(16, 185, 129)',
+                                pointBorderColor: '#fff',
+                                pointRadius: 4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: {
+                                    display: true,
+                                    color: 'rgba(0, 0, 0, 0.1)'
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 100,
+                                ticks: {
+                                    stepSize: 20,
+                                    font: { size: 10 },
+                                    showLabelBackdrop: false
+                                },
+                                pointLabels: {
+                                    font: { size: 11, weight: 'bold' }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: { size: 12 },
+                                    padding: 15
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        // 銷毀所有現有圖表
+        function destroyAllCharts() {
+            const chartIds = [
+                'contentTypeChart', 
+                'monthlyTrendChart', 
+                'retentionComparisonChart', 
+                'goalsComparisonChart'
+            ];
+            
+            chartIds.forEach(id => {
+                const chart = Chart.getChart(id);
+                if (chart) chart.destroy();
+            });
+        }
+        
+        // 圖表通用配置
+        function getChartOptions(yTitle = '', xTitle = '') {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 11 },
+                            padding: 15,
+                            boxWidth: 12
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: yTitle ? {
+                            display: true,
+                            text: yTitle,
+                            font: { size: 11 }
+                        } : undefined,
+                        ticks: {
+                            font: { size: 10 }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        title: xTitle ? {
+                            display: true,
+                            text: xTitle,
+                            font: { size: 11 }
+                        } : undefined,
+                        ticks: {
+                            font: { size: 10 }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            };
+        }
+    </script>
+</body>
+</html>
