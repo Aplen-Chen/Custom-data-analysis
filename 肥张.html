@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>澳門房地產系列視頻分析報告</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    
+    <!-- 配置Tailwind顏色和字體 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#FF7D00',
+                        dark: '#1D2939',
+                        light: '#F9FAFB',
+                        success: '#00B42A',
+                        warning: '#FF7D00',
+                        danger: '#F53F3F',
+                        neutral: '#86909C'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-dark pb-20"> <!-- 增加底部内边距防止内容被遮挡 -->
+    <!-- 頁頭 -->
+    <header class="bg-primary text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold">澳門房地產系列視頻分析</h1>
+            <div class="text-sm opacity-80">共11集</div>
+        </div>
+    </header>
+
+    <!-- 主要內容 -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- 視頻趨勢部分 -->
+        <section id="trends" class="section-content">
+            <h2 class="text-2xl font-bold mb-6 text-primary">視頻趨勢</h2>
+            
+            <!-- 播放量走勢圖 -->
+            <div class="bg-white rounded-xl shadow-md p-4 mb-6">
+                <h3 class="text-lg font-semibold mb-4">各集播放量走勢</h3>
+                <div class="h-64">
+                    <canvas id="viewsChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- 關鍵指標走勢圖 -->
+            <div class="bg-white rounded-xl shadow-md p-4 mb-6">
+                <h3 class="text-lg font-semibold mb-4">關鍵指標對比</h3>
+                <div class="h-64">
+                    <canvas id="metricsChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- 整體趨勢分析 -->
+            <div class="bg-white rounded-xl shadow-md p-5 mb-6">
+                <h3 class="text-lg font-semibold mb-3">整體趨勢分析</h3>
+                <p class="mb-3">系列視頻播放量呈現明顯波動，其中第7集（柏傲峰復式）表現最為突出，播放量達27,292次，成為系列爆款。</p>
+                <p class="mb-3">豪宅類型視頻普遍表現優於商鋪類型，尤其是帶有"稀缺性"、"海景"、"露台"等元素的內容更受關注。</p>
+                <p>第11集因內容定位錯位（抒情大於房產展示），成為表現最差的一集，播放量僅1,381次。</p>
+            </div>
+        </section>
+
+        <!-- 視頻分析部分 -->
+        <section id="analysis" class="section-content hidden">
+            <h2 class="text-2xl font-bold mb-6 text-primary">視頻分析</h2>
+            
+            <!-- 視頻分組標籤 -->
+            <div class="flex overflow-x-auto scrollbar-hide mb-6 gap-2 pb-2">
+                <button class="video-group-btn active px-4 py-2 bg-primary text-white rounded-full whitespace-nowrap" data-group="all">全部11集</button>
+                <button class="video-group-btn px-4 py-2 bg-gray-200 text-dark rounded-full whitespace-nowrap" data-group="1-4">第1-4集</button>
+                <button class="video-group-btn px-4 py-2 bg-gray-200 text-dark rounded-full whitespace-nowrap" data-group="5-8">第5-8集</button>
+                <button class="video-group-btn px-4 py-2 bg-gray-200 text-dark rounded-full whitespace-nowrap" data-group="9-11">第9-11集</button>
+            </div>
+            
+            <!-- 視頻列表 -->
+            <div class="space-y-4">
+                <!-- 第1集 -->
+                <div class="video-card bg-white rounded-xl shadow-md overflow-hidden card-hover" data-group="1-4">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold">第1集：澳門樓市大揭密，200w到320w之間的絕佳樓盤</h3>
+                            <span class="bg-success text-white text-xs px-2 py-1 rounded-full">S級表現</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">播放量</div>
+                                <div class="font-semibold">9,741</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">完播率</div>
+                                <div class="font-semibold">13.53%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">分享率</div>
+                                <div class="font-semibold">1.08%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">吸粉量</div>
+                                <div class="font-semibold">65</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600">播放量、分享率、3秒完播率、吸粉量均達系列峰值，無明顯短板，是典型的垂直領域爆款視頻。</p>
+                    </div>
+                </div>
+                
+                <!-- 第2集 -->
+                <div class="video-card bg-white rounded-xl shadow-md overflow-hidden card-hover" data-group="1-4">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold">第2集：澳門樓市大揭密第二集：320w到420w之間的樓盤</h3>
+                            <span class="bg-secondary text-white text-xs px-2 py-1 rounded-full">A級表現</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">播放量</div>
+                                <div class="font-semibold">9,563</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">完播率</div>
+                                <div class="font-semibold">5.27%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">分享率</div>
+                                <div class="font-semibold">0.45%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">吸粉量</div>
+                                <div class="font-semibold">18</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600">播放量接近第一集，核心完播度穩定，但3秒完播率、分享率、吸粉量均有下滑，暴露封面標題筆誤等細節問題。</p>
+                    </div>
+                </div>
+                
+                <!-- 第3集 -->
+                <div class="video-card bg-white rounded-xl shadow-md overflow-hidden card-hover" data-group="1-4">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold">第3集：澳門樓市大揭密第三集：420w到520w之間的樓盤</h3>
+                            <span class="bg-danger text-white text-xs px-2 py-1 rounded-full">C級表現</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">播放量</div>
+                                <div class="font-semibold">1,653</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">完播率</div>
+                                <div class="font-semibold">8.60%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">分享率</div>
+                                <div class="font-semibold">0.85%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">吸粉量</div>
+                                <div class="font-semibold">3</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600">播放量斷崖式下滑，3秒完播率降至最低點，雖內容質量未變，但標題模式疲態導致用戶觸達失效。</p>
+                    </div>
+                </div>
+                
+                <!-- 第4集 -->
+                <div class="video-card bg-white rounded-xl shadow-md overflow-hidden card-hover" data-group="1-4">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold">第4集：澳門樓市大揭密第四集：520w到620w之間的樓盤</h3>
+                            <span class="bg-warning text-white text-xs px-2 py-1 rounded-full">B級表現</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">播放量</div>
+                                <div class="font-semibold">3,818</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">完播率</div>
+                                <div class="font-semibold">6.78%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">分享率</div>
+                                <div class="font-semibold">1.05%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">吸粉量</div>
+                                <div class="font-semibold">27</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600">成功修復"門面問題"，3秒完播率、分享率回歸爆款水平，播放量顯著反彈，但評論數持續低迷。</p>
+                    </div>
+                </div>
+                
+                <!-- 第5集 -->
+                <div class="video-card bg-white rounded-xl shadow-md overflow-hidden card-hover" data-group="5-8">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold">第5集：準備開店的不要錯過三間潛力商鋪</h3>
+                            <span class="bg-danger text-white text-xs px-2 py-1 rounded-full">C級表現</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">播放量</div>
+                                <div class="font-semibold">1,849</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">完播率</div>
+                                <div class="font-semibold">5.14%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">分享率</div>
+                                <div class="font-semibold">0.32%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">吸粉量</div>
+                                <div class="font-semibold">3</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600">聚焦"商鋪投資"極窄領域，精准用戶占比高，但內容缺乏社交屬性，無法破圈。</p>
+                    </div>
+                </div>
+                
+                <!-- 第6集 -->
+                <div class="video-card bg-white rounded-xl shadow-md overflow-hidden card-hover" data-group="5-8">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold">第6集：濠尚海景兩房，靚裝修海景單位，性價比絕了</h3>
+                            <span class="bg-secondary text-white text-xs px-2 py-1 rounded-full">A級表現</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">播放量</div>
+                                <div class="font-semibold">2,590</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">完播率</div>
+                                <div class="font-semibold">12.24%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">分享率</div>
+                                <div class="font-semibold">1.54%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">吸粉量</div>
+                                <div class="font-semibold">33</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600">高分享率是核心亮點，精准觸達豪宅潛在用戶，完播率優秀，內容專業度高，但評論數偏少。</p>
+                    </div>
+                </div>
+                
+                <!-- 第7集 -->
+                <div class="video-card bg-white rounded-xl shadow-md overflow-hidden card-hover" data-group="5-8">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold">第7集：澳門柏傲峰3千呎大復式｜五個露台，一梯一戶</h3>
+                            <span class="bg-success text-white text-xs px-2 py-1 rounded-full">S級表現</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">播放量</div>
+                                <div class="font-semibold">27,292</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">完播率</div>
+                                <div class="font-semibold">18.9%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">分享率</div>
+                                <div class="font-semibold">0.84%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">吸粉量</div>
+                                <div class="font-semibold">221</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600">播放量突破2.7萬，是系列唯一"超級爆款"，核心優勢在於"3000呎復式+五個露台+一梯一戶"的稀缺房源屬性。</p>
+                    </div>
+                </div>
+                
+                <!-- 第8集 -->
+                <div class="video-card bg-white rounded-xl shadow-md overflow-hidden card-hover" data-group="5-8">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold">第8集：6千/呎買濠珀？三房兩廁+雙露台，還能睇曬中央公園</h3>
+                            <span class="bg-warning text-white text-xs px-2 py-1 rounded-full">B級表現</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">播放量</div>
+                                <div class="font-semibold">4,963</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">完播率</div>
+                                <div class="font-semibold">8.93%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">分享率</div>
+                                <div class="font-semibold">1.21%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">吸粉量</div>
+                                <div class="font-semibold">219</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600">"6千/呎"價格賣點突出，分享數、吸粉量表現良好，但開頭鉤子弱，完播率低，導致播放量未達預期。</p>
+                    </div>
+                </div>
+                
+                <!-- 第9集 -->
+                <div class="video-card bg-white rounded-xl shadow-md overflow-hidden card-hover" data-group="9-11">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold">第9集：天璽湖坐擁雙重海景，無論你是自住還是投資收租</h3>
+                            <span class="bg-secondary text-white text-xs px-2 py-1 rounded-full">A級表現</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">播放量</div>
+                                <div class="font-semibold">3,715</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">完播率</div>
+                                <div class="font-semibold">8.96%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">分享率</div>
+                                <div class="font-semibold">0.86%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">吸粉量</div>
+                                <div class="font-semibold">70</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600">3秒完播率、播放量均達系列優秀水平，分享率合格，核心問題是"內容結構倒置"，導致完播率低。</p>
+                    </div>
+                </div>
+                
+                <!-- 第10集 -->
+                <div class="video-card bg-white rounded-xl shadow-md overflow-hidden card-hover" data-group="9-11">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold">第10集：壹號湖畔單位，千八呎三房＋露台＋靚採光</h3>
+                            <span class="bg-warning text-white text-xs px-2 py-1 rounded-full">B級表現</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">播放量</div>
+                                <div class="font-semibold">2,154</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">完播率</div>
+                                <div class="font-semibold">11.61%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">分享率</div>
+                                <div class="font-semibold">1.35%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">吸粉量</div>
+                                <div class="font-semibold">50</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600">"粉絲提問"選題模式有效，分享率、平均播放完成度表現良好，但開頭3秒節奏慢，導致播放量未達預期。</p>
+                    </div>
+                </div>
+                
+                <!-- 第11集 -->
+                <div class="video-card bg-white rounded-xl shadow-md overflow-hidden card-hover" data-group="9-11">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold">第11集：住進松山壹號，是品味還是選擇</h3>
+                            <span class="bg-danger text-white text-xs px-2 py-1 rounded-full">C級表現</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">播放量</div>
+                                <div class="font-semibold">1,381</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">完播率</div>
+                                <div class="font-semibold">7.54%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">分享率</div>
+                                <div class="font-semibold">1.52%</div>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded-lg">
+                                <div class="text-xs text-neutral">吸粉量</div>
+                                <div class="font-semibold">42</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600">內容嚴重錯位，77秒視頻僅抒情無房產展示，雖分享率高，但播放量、完播率、吸粉量均為系列最差。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 策略建議部分 -->
+        <section id="strategies" class="section-content hidden">
+            <h2 class="text-2xl font-bold mb-6 text-primary">策略建議</h2>
+            
+            <!-- 整體策略 -->
+            <div class="bg-white rounded-xl shadow-md p-5 mb-6">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    <i class="fa fa-lightbulb-o text-secondary mr-2"></i>整體策略方向
+                </h3>
+                <ul class="space-y-3 text-sm">
+                    <li class="flex">
+                        <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
+                        <span>優先製作"稀缺豪宅+價格錨點"類內容，避免"商鋪"等極窄領域</span>
+                    </li>
+                    <li class="flex">
+                        <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
+                        <span>堅持"30%情感共鳴+70%房產信息"的內容比例，避免純抒情</span>
+                    </li>
+                    <li class="flex">
+                        <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
+                        <span>強化"澳門豪宅專家"定位，製作樓盤專題系列，提升用戶粘性</span>
+                    </li>
+                    <li class="flex">
+                        <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
+                        <span>控制視頻時長在90秒以內，快節奏剪輯，保留核心亮點</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- 標題與封面優化 -->
+            <div class="bg-white rounded-xl shadow-md p-5 mb-6">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    <i class="fa fa-pencil-square-o text-secondary mr-2"></i>標題與封面優化
+                </h3>
+                <div class="space-y-4 text-sm">
+                    <div>
+                        <h4 class="font-medium mb-1">標題優化建議：</h4>
+                        <ul class="space-y-2 ml-5 list-disc">
+                            <li>避免單純羅列預算，突出每集差異化賣點</li>
+                            <li>加入具體數字和場景化描述（如"大三房"、"核心地段"）</li>
+                            <li>注入價格錨點（如"6千/呎"），吸引用戶點擊</li>
+                            <li>範例：《420萬起！澳門"江景大三房"樓盤揭秘，改善型首選！》</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-1">封面優化建議：</h4>
+                        <ul class="space-y-2 ml-5 list-disc">
+                            <li>弱化"集數"標識，突出核心賣點（如"江景"、"商圈"）</li>
+                            <li>使用高質量樓盤圖片，優先選擇景觀最佳角度</li>
+                            <li>封面標題與視頻開頭3秒內容強關聯</li>
+                            <li>統一視覺風格，強化"澳門樓市揭秘"IP辨識度</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 內容結構優化 -->
+            <div class="bg-white rounded-xl shadow-md p-5 mb-6">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    <i class="fa fa-th-list text-secondary mr-2"></i>內容結構優化
+                </h3>
+                <div class="space-y-4 text-sm">
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                        <h4 class="font-medium mb-2">黃金3秒開頭公式：</h4>
+                        <p>開頭3秒必拋"價格/景觀/稀缺性"超級鉤子，例如：</p>
+                        <p class="mt-1 italic">"七千二蚊一尺！氹仔海景兩房，帶雙露台？值不值？"</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-1">內容結構建議：</h4>
+                        <ul class="space-y-2 ml-5 list-disc">
+                            <li>0-15秒：展示最吸引人的賣點（客廳/陽台海景）</li>
+                            <li>15-45秒：戶型展示和核心特點介紹</li>
+                            <li>45-60秒：配套設施和周邊環境補充</li>
+                            <li>60-70秒：引導互動和行動號召</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-1">節奏優化：</h4>
+                        <ul class="space-y-2 ml-5 list-disc">
+                            <li>刪除冗餘鏡頭（如走路、雜物房展示）</li>
+                            <li>使用"跳躍剪輯"省略無意義片段</li>
+                            <li>重要信息用字幕強調，便於手機用戶觀看</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 互動與轉化優化 -->
+            <div class="bg-white rounded-xl shadow-md p-5 mb-6">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    <i class="fa fa-comments text-secondary mr-2"></i>互動與轉化優化
+                </h3>
+                <div class="space-y-4 text-sm">
+                    <div>
+                        <h4 class="font-medium mb-1">評論互動引導：</h4>
+                        <ul class="space-y-2 ml-5 list-disc">
+                            <li>在視頻中段插入2-3個具體互動問題，如"這個露台做書房還是花園？"</li>
+                            <li>視頻結尾加入引導："你更在意樓盤的地段還是戶型？評論區告訴我"</li>
+                            <li>開展"評論抽獎"活動："評論點贊前3名，免費獲取樓盤資料包"</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-1">評論區運營：</h4>
+                        <ul class="space-y-2 ml-5 list-disc">
+                            <li>主動回復用戶評論，建立專業形象</li>
+                            <li>置頂高頻問題（如"樓盤產權年限"、"貸款政策"）</li>
+                            <li>置頂房源資料卡，包含面積/戶型/尺價/預約方式</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-1">吸粉與轉化：</h4>
+                        <ul class="space-y-2 ml-5 list-disc">
+                            <li>結尾引導："想獲取更多樓盤資料？關注我+私信'樓盤名'"</li>
+                            <li>定期舉辦"粉絲專場"直播，線上解答置業問題</li>
+                            <li>建立"澳門置業交流群"，增強用戶粘性</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 後續內容規劃 -->
+            <div class="bg-white rounded-xl shadow-md p-5">
+                <h3 class="text-lg font-semibold mb-3 flex items-center">
+                    <i class="fa fa-calendar-check-o text-secondary mr-2"></i>後續內容規劃建議
+                </h3>
+                <div class="space-y-3 text-sm">
+                    <div class="p-3 border border-primary/20 rounded-lg bg-primary/5">
+                        <h4 class="font-medium mb-1">短期內容（12-16集）：</h4>
+                        <p>聚焦"稀缺豪宅+價格優勢"，例如：</p>
+                        <ul class="mt-1 ml-5 list-disc space-y-1">
+                            <li>《帶私人泳池豪宅，澳門僅有這3個樓盤》</li>
+                            <li>《氹仔vs半島，同預算買房差異有多大？》</li>
+                            <li>《澳門"學區房"盤點，家長必看！》</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-3 border border-primary/20 rounded-lg bg-primary/5">
+                        <h4 class="font-medium mb-1">中期系列策劃：</h4>
+                        <ul class="mt-1 ml-5 list-disc space-y-1">
+                            <li>"樓盤專題系列"：如《壹號湖畔3個稀缺戶型對比》</li>
+                            <li>"置業指南系列"：如《澳門買房必知5個法律問題》</li>
+                            <li>"投資分析系列"：如《澳門各區房產投資回報率對比》</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-3 border border-primary/20 rounded-lg bg-primary/5">
+                        <h4 class="font-medium mb-1">熱點跟蹤：</h4>
+                        <p>結合澳門房產政策熱點，例如：</p>
+                        <ul class="mt-1 ml-5 list-disc space-y-1">
+                            <li>《人才引進政策下，澳門房價會上漲嗎？》</li>
+                            <li>《最新貸款政策解析，買房能省多少？》</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 目標追蹤部分 - 重新設計 -->
+        <section id="tracking" class="section-content hidden">
+            <h2 class="text-2xl font-bold mb-6 text-primary">目標追蹤</h2>
+            
+            <!-- 整體績效目標 -->
+            <div class="bg-white rounded-xl shadow-md p-5 mb-6">
+                <h3 class="text-lg font-semibold mb-3">整體績效目標</h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm">平均播放量</span>
+                            <span class="text-sm font-medium">目標：8,000+</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-primary h-2.5 rounded-full" style="width: 55%"></div>
+                        </div>
+                        <div class="text-right text-xs text-neutral mt-1">當前：4,400</div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm">平均完播率</span>
+                            <span class="text-sm font-medium">目標：15%+</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-primary h-2.5 rounded-full" style="width: 75%"></div>
+                        </div>
+                        <div class="text-right text-xs text-neutral mt-1">當前：11.25%</div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm">3秒完播率</span>
+                            <span class="text-sm font-medium">目標：75%+</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-primary h-2.5 rounded-full" style="width: 82%"></div>
+                        </div>
+                        <div class="text-right text-xs text-neutral mt-1">當前：61.5%</div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm">平均分享率</span>
+                            <span class="text-sm font-medium">目標：1.2%+</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-primary h-2.5 rounded-full" style="width: 95%"></div>
+                        </div>
+                        <div class="text-right text-xs text-neutral mt-1">當前：1.14%</div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm">平均評論數</span>
+                            <span class="text-sm font-medium">目標：20+</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-primary h-2.5 rounded-full" style="width: 35%"></div>
+                        </div>
+                        <div class="text-right text-xs text-neutral mt-1">當前：7</div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm">平均吸粉量</span>
+                            <span class="text-sm font-medium">目標：80+</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-primary h-2.5 rounded-full" style="width: 65%"></div>
+                        </div>
+                        <div class="text-right text-xs text-neutral mt-1">當前：52</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 近期目標（下一階段） -->
+            <div class="bg-white rounded-xl shadow-md p-5 mb-6">
+                <h3 class="text-lg font-semibold mb-3">下一階段（12-16集）具體目標</h3>
+                <div class="space-y-4">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-medium mb-2">核心KPI目標</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex justify-between">
+                                <span>單集平均播放量</span>
+                                <span class="font-semibold">8,000+</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>平均完播率</span>
+                                <span class="font-semibold">15%+</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>平均評論數</span>
+                                <span class="font-semibold">15+</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>平均吸粉量</span>
+                                <span class="font-semibold">80+</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-medium mb-2">內容質量目標</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-start">
+                                <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                                <span>每集至少包含2個明確的用戶互動點</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                                <span>嚴格控制視頻時長在90秒以內</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                                <span>開頭3秒必須包含強烈的點擊誘因（價格/稀缺性）</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                                <span>每集至少展示3個樓盤核心賣點</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 整體改進建議 -->
+            <div class="bg-white rounded-xl shadow-md p-5">
+                <h3 class="text-lg font-semibold mb-3">整體改進建議</h3>
+                
+                <div class="space-y-4 text-sm">
+                    <div>
+                        <h4 class="font-medium mb-2 text-primary">內容方向調整</h4>
+                        <ul class="space-y-2 ml-5 list-disc">
+                            <li>增加"對比類"內容比例，如《同預算不同區域樓盤對比》</li>
+                            <li>適度引入"置業知識科普"，增強專業權威性</li>
+                            <li>減少純展示類內容，增加分析和解讀元素</li>
+                            <li>每2-3集策劃一個小型系列，形成內容矩陣</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-2 text-primary">製作流程優化</h4>
+                        <ul class="space-y-2 ml-5 list-disc">
+                            <li>建立"標題-封面"A/B測試機制，提升點擊率</li>
+                            <li>實施"內容三審"制度：选题審核→腳本審核→成片審核</li>
+                            <li>建立"爆款元素庫"，積累高反響的內容模塊</li>
+                            <li>固定發布時間，培養用戶觀看習慣</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-2 text-primary">數據追蹤機制</h4>
+                        <ul class="space-y-2 ml-5 list-disc">
+                            <li>建立"每集數據速覽"表，追蹤核心指標變化</li>
+                            <li>實施"爆款複製"機制，快速迭代成功模式</li>
+                            <li>每周召開"內容檢討會"，及時調整策略</li>
+                            <li>建立"用戶反饋收集"機制，從評論中挖掘選題</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 底部導航欄 -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50">
+        <div class="flex justify-around">
+            <button class="nav-btn active flex-1 py-3 flex flex-col items-center justify-center" data-target="trends">
+                <i class="fa fa-line-chart text-primary text-xl"></i>
+                <span class="text-xs mt-1 text-primary">視頻趨勢</span>
+            </button>
+            <button class="nav-btn flex-1 py-3 flex flex-col items-center justify-center" data-target="analysis">
+                <i class="fa fa-bar-chart text-gray-400 text-xl"></i>
+                <span class="text-xs mt-1 text-gray-400">視頻分析</span>
+            </button>
+            <button class="nav-btn flex-1 py-3 flex flex-col items-center justify-center" data-target="strategies">
+                <i class="fa fa-lightbulb-o text-gray-400 text-xl"></i>
+                <span class="text-xs mt-1 text-gray-400">策略建議</span>
+            </button>
+            <button class="nav-btn flex-1 py-3 flex flex-col items-center justify-center" data-target="tracking">
+                <i class="fa fa-bullseye text-gray-400 text-xl"></i>
+                <span class="text-xs mt-1 text-gray-400">目標追蹤</span>
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        // 頁面加載完成後初始化圖表和事件
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化播放量走勢圖 - 更新為11集數據
+            const viewsCtx = document.getElementById('viewsChart').getContext('2d');
+            const viewsChart = new Chart(viewsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['第1集', '第2集', '第3集', '第4集', '第5集', '第6集', '第7集', '第8集', '第9集', '第10集', '第11集'],
+                    datasets: [{
+                        label: '播放量',
+                        data: [9741, 9563, 1653, 3818, 1849, 2590, 27292, 4963, 3715, 2154, 1381],
+                        borderColor: '#165DFF',
+                        backgroundColor: 'rgba(22, 93, 255, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: '#165DFF',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                            padding: 10,
+                            titleFont: {
+                                size: 14
+                            },
+                            bodyFont: {
+                                size: 13
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 初始化關鍵指標對比圖 - 更新為11集內的指標
+            const metricsCtx = document.getElementById('metricsChart').getContext('2d');
+            const metricsChart = new Chart(metricsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['第1集', '第7集', '第10集', '第11集'],
+                    datasets: [
+                        {
+                            label: '完播率(%)',
+                            data: [13.53, 18.9, 11.61, 7.54],
+                            backgroundColor: 'rgba(255, 125, 0, 0.7)',
+                            barPercentage: 0.6
+                        },
+                        {
+                            label: '分享率(%)',
+                            data: [1.08, 0.84, 1.35, 1.52],
+                            backgroundColor: 'rgba(0, 180, 42, 0.7)',
+                            barPercentage: 0.6
+                        },
+                        {
+                            label: '3秒完播率(%)',
+                            data: [68.04, 68.6, 61.71, 58.2],
+                            backgroundColor: 'rgba(22, 93, 255, 0.7)',
+                            barPercentage: 0.6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 15
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 導航按鈕切換
+            const navBtns = document.querySelectorAll('.nav-btn');
+            const sectionContents = document.querySelectorAll('.section-content');
+            
+            navBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 移除所有按鈕的活躍狀態
+                    navBtns.forEach(b => {
+                        b.classList.remove('active');
+                        b.querySelector('i').classList.remove('text-primary');
+                        b.querySelector('i').classList.add('text-gray-400');
+                        b.querySelector('span').classList.remove('text-primary');
+                        b.querySelector('span').classList.add('text-gray-400');
+                    });
+                    
+                    // 添加當前按鈕的活躍狀態
+                    this.classList.add('active');
+                    this.querySelector('i').classList.remove('text-gray-400');
+                    this.querySelector('i').classList.add('text-primary');
+                    this.querySelector('span').classList.remove('text-gray-400');
+                    this.querySelector('span').classList.add('text-primary');
+                    
+                    // 顯示對應的內容區域
+                    const target = this.getAttribute('data-target');
+                    sectionContents.forEach(section => {
+                        section.classList.add('hidden');
+                    });
+                    document.getElementById(target).classList.remove('hidden');
+                    
+                    // 滾動到頂部
+                    window.scrollTo(0, 0);
+                });
+            });
+            
+            // 視頻分組過濾 - 更新分組為9-11集
+            const groupBtns = document.querySelectorAll('.video-group-btn');
+            const videoCards = document.querySelectorAll('.video-card');
+            
+            groupBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 移除所有按鈕的活躍狀態
+                    groupBtns.forEach(b => {
+                        b.classList.remove('active', 'bg-primary', 'text-white');
+                        b.classList.add('bg-gray-200', 'text-dark');
+                    });
+                    
+                    // 添加當前按鈕的活躍狀態
+                    this.classList.add('active', 'bg-primary', 'text-white');
+                    this.classList.remove('bg-gray-200', 'text-dark');
+                    
+                    // 過濾顯示對應的視頻卡片
+                    const group = this.getAttribute('data-group');
+                    videoCards.forEach(card => {
+                        if (group === 'all' || card.getAttribute('data-group') === group) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
