@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>合記(續跑) - 选题分析报告</title>
+    <!-- 外部资源引入 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1890FF',
+                        secondary: '#722ED1',
+                        neutral: '#F5F7FA',
+                        dark: '#1F2937',
+                        light: '#F9FAFB'
+                    },
+                    fontFamily: {
+                        sans: ['Microsoft YaHei', 'sans-serif']
+                    },
+                    backdropBlur: {
+                        xs: '2px'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .glass {
+                background: rgba(255, 255, 255, 0.85);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                border: 1px solid rgba(200, 200, 200, 0.18);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            }
+            .nav-active {
+                color: #1890FF;
+                font-weight: 600;
+                position: relative;
+            }
+            .nav-active::after {
+                content: '';
+                position: absolute;
+                bottom: -4px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 24px;
+                height: 2px;
+                background-color: #1890FF;
+                border-radius: 1px;
+            }
+            .page-transition {
+                transition: opacity 0.3s ease, transform 0.3s ease;
+            }
+            .page-enter {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            .card-hover {
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            }
+        }
+    </style>
+</head>
+<body class="bg-neutral min-h-screen font-sans text-gray-800">
+    <!-- 页面容器 -->
+    <div class="container mx-auto px-4 pt-6 pb-24">
+        <!-- 1. 首页（报告总览） -->
+        <section id="home" class="page-transition">
+            <div class="glass rounded-2xl shadow-lg p-6 mb-8">
+                <h1 class="text-[clamp(1.5rem,4vw,2rem)] font-bold text-dark text-center mb-4">
+                    合記(續跑) <span class="text-primary">-</span> 选题数据分析报告
+                </h1>
+                <div class="flex flex-col md:flex-row justify-between items-center text-gray-600 mb-6 text-sm">
+                    <div class="flex items-center mb-4 md:mb-0">
+                        <i class="fa-solid fa-file-alt mr-2 text-primary"></i>
+                        <span>文件名：_合記(續跑)_选题分析报告_2025-10-13_09-22-22.doc</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-calendar-days mr-2 text-primary"></i>
+                        <span>生成时间：2025年10月13日 09:22:22</span>
+                    </div>
+                </div>
+                <div class="h-1 w-full bg-gradient-to-r from-primary/30 to-secondary/30 rounded-full mb-6"></div>
+
+                <!-- 核心概览卡片 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="glass rounded-xl p-4 card-hover">
+                        <div class="flex items-center mb-3">
+                            <i class="fa-solid fa-list-check text-primary text-xl mr-3"></i>
+                            <h3 class="text-lg font-semibold">选题总数</h3>
+                        </div>
+                        <div class="text-3xl font-bold text-primary">3 个</div>
+                        <div class="text-xs text-gray-500 mt-1">含活动推广、产品介绍两类</div>
+                    </div>
+                    <div class="glass rounded-xl p-4 card-hover">
+                        <div class="flex items-center mb-3">
+                            <i class="fa-solid fa-chart-pie text-primary text-xl mr-3"></i>
+                            <h3 class="text-lg font-semibold">有数据选题</h3>
+                        </div>
+                        <div class="text-3xl font-bold text-primary">2 个</div>
+                        <div class="text-xs text-gray-500 mt-1">选题1、选题3含完整分析数据</div>
+                    </div>
+                    <div class="glass rounded-xl p-4 card-hover">
+                        <div class="flex items-center mb-3">
+                            <i class="fa-solid fa-rocket text-primary text-xl mr-3"></i>
+                            <h3 class="text-lg font-semibold">最高播放量</h3>
+                        </div>
+                        <div class="text-3xl font-bold text-primary">22,817</div>
+                        <div class="text-xs text-gray-500 mt-1">选题3（上海订单主题）</div>
+                    </div>
+                </div>
+
+                <!-- 选题核心特征 -->
+                <div class="glass rounded-xl p-5">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center text-dark">
+                        <i class="fa-solid fa-star text-amber-500 mr-2"></i>
+                        选题核心特征
+                    </h3>
+                    <div class="space-y-3 text-sm text-gray-700">
+                        <div class="flex items-start">
+                            <i class="fa-solid fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span><strong>选题1</strong>：活动推广类，获银河安达仕酒店邀请，品牌势能突出，播放量5,917（需优化节奏）</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fa-solid fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span><strong>选题2</strong>：产品介绍类，聚焦老顾客回访，暂未提供分析数据</span>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fa-solid fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span><strong>选题3</strong>：产品介绍类，远程订单（上海）主题，播放量22,817（接近优秀线，优化后有望爆款）</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. 选题1详情 -->
+        <section id="topic1" class="page-transition page-enter hidden">
+            <div class="glass rounded-2xl shadow-lg p-6 mb-8">
+                <h2 class="text-[clamp(1.2rem,3vw,1.6rem)] font-bold text-dark mb-6 flex items-center">
+                    <i class="fa-solid fa-circle-1 text-primary mr-2"></i>
+                    选题1：一口花生糖，带你走進一場中葡美酒美食市集為中葡的多元文化出一點力
+                </h2>
+
+                <!-- 基本信息表格 -->
+                <div class="glass rounded-xl p-5 mb-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
+                        <i class="fa-solid fa-info-circle text-primary mr-2"></i>
+                        基本信息
+                    </h3>
+                    <table class="w-full text-sm">
+                        <tbody class="divide-y divide-gray-100">
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">类型</td>
+                                <td class="py-2">video</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">分类</td>
+                                <td class="py-2">活动推广</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">状态</td>
+                                <td class="py-2"><span class="inline-block px-2 py-0.5 rounded bg-green-100 text-green-700 text-xs">已发布</span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">创建时间</td>
+                                <td class="py-2">2025-09-16 00:00:00</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">发布时间</td>
+                                <td class="py-2 text-gray-500">未标注（状态为已发布）</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">选题描述/剧本</td>
+                                <td class="py-2 text-gray-500">无描述、无剧本内容</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 数据分析（图表+表格） -->
+                <div class="glass rounded-xl p-5 mb-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
+                        <i class="fa-solid fa-chart-line text-primary mr-2"></i>
+                        数据分析（2025-10-10）
+                    </h3>
+                    
+                    <!-- 图表区域 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="h-56">
+                            <canvas id="topic1Chart1"></canvas>
+                        </div>
+                        <div class="h-56">
+                            <canvas id="topic1Chart2"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 数据表格 -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-3 py-2 text-left text-gray-600 font-medium">指标</th>
+                                    <th class="px-3 py-2 text-center text-gray-600 font-medium">数值</th>
+                                    <th class="px-3 py-2 text-center text-gray-600 font-medium">行业合格线</th>
+                                    <th class="px-3 py-2 text-center text-gray-600 font-medium">表现评估</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr>
+                                    <td class="px-3 py-2 text-gray-700">播放量</td>
+                                    <td class="px-3 py-2 text-center">5,917</td>
+                                    <td class="px-3 py-2 text-center">1万（及格）/10万（优秀）</td>
+                                    <td class="px-3 py-2 text-center text-amber-500">不及格</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 text-gray-700">完播率</td>
+                                    <td class="px-3 py-2 text-center">14.36%</td>
+                                    <td class="px-3 py-2 text-center">15%-20%（及格）/25%+（优秀）</td>
+                                    <td class="px-3 py-2 text-center text-amber-500">略低于及格线</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 text-gray-700">平均观看时长</td>
+                                    <td class="px-3 py-2 text-center">45.50秒（总时长70秒，占比65%）</td>
+                                    <td class="px-3 py-2 text-center">-</td>
+                                    <td class="px-3 py-2 text-center text-green-500">极其优秀</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 text-gray-700">3秒完播率</td>
+                                    <td class="px-3 py-2 text-center">72.23%</td>
+                                    <td class="px-3 py-2 text-center">50%（及格）/60%+（优秀）</td>
+                                    <td class="px-3 py-2 text-center text-green-500">非常优秀</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 text-gray-700">互动率</td>
+                                    <td class="px-3 py-2 text-center">3.16%</td>
+                                    <td class="px-3 py-2 text-center">1%-2%（及格）/3%+（优秀）</td>
+                                    <td class="px-3 py-2 text-center text-green-500">优秀</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 text-gray-700">吸粉量</td>
+                                    <td class="px-3 py-2 text-center">16</td>
+                                    <td class="px-3 py-2 text-center">-</td>
+                                    <td class="px-3 py-2 text-center text-gray-600">一般</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 备注与优化建议 -->
+                <div class="glass rounded-xl p-5">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
+                        <i class="fa-solid fa-lightbulb text-secondary mr-2"></i>
+                        备注与优化建议
+                    </h3>
+                    
+                    <!-- 核心诊断 -->
+                    <div class="mb-5">
+                        <h4 class="font-semibold text-primary mb-2">核心诊断</h4>
+                        <div class="text-sm text-gray-700 space-y-2 pl-4 border-l-2 border-primary/30">
+                            <p>定位：<strong>品牌形象片</strong>，核心价值为提升品牌势能，非直接获取流量</p>
+                            <p>优势：银河安达仕酒店背书强，高平均观看时长/互动率证明内容价值</p>
+                            <p>劣势：节奏拖沓（含冗余行走/等待镜头），内容偏“活动记录”而非“短视频优化”</p>
+                        </div>
+                    </div>
+
+                    <!-- 优化建议 -->
+                    <div>
+                        <h4 class="font-semibold text-primary mb-2">分点优化建议</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div class="bg-light rounded-lg p-3">
+                                <h5 class="font-medium text-dark mb-2 flex items-center">
+                                    <i class="fa-solid fa-file-video text-primary mr-1"></i>
+                                    内容与脚本
+                                </h5>
+                                <ul class="space-y-1 text-gray-700 pl-5 list-disc">
+                                    <li>前5秒蒙太奇开场（酒店Logo→美食快剪→悬念字幕）</li>
+                                    <li>删减冗余，聚焦“受邀→市集+产品→价值升华”</li>
+                                    <li>加花生糖特写、外国友人试吃镜头</li>
+                                </ul>
+                            </div>
+                            <div class="bg-light rounded-lg p-3">
+                                <h5 class="font-medium text-dark mb-2 flex items-center">
+                                    <i class="fa-solid fa-pen-ruler text-primary mr-1"></i>
+                                    标题与封面
+                                </h5>
+                                <ul class="space-y-1 text-gray-700 pl-5 list-disc">
+                                    <li>标题：《街边花生糖收到银河安达仕酒店请柬》</li>
+                                    <li>封面：老板持产品与酒店合影+“受邀五星酒店”文案</li>
+                                </ul>
+                            </div>
+                            <div class="bg-light rounded-lg p-3 md:col-span-2">
+                                <h5 class="font-medium text-dark mb-2 flex items-center">
+                                    <i class="fa-solid fa-comments text-primary mr-1"></i>
+                                    互动与转化
+                                </h5>
+                                <p class="text-gray-700">评论区置顶：“做几十年街坊生意，受邀是对传统手艺的肯定，多谢支持！”</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 选题2详情 -->
+        <section id="topic2" class="page-transition page-enter hidden">
+            <div class="glass rounded-2xl shadow-lg p-6 mb-8">
+                <h2 class="text-[clamp(1.2rem,3vw,1.6rem)] font-bold text-dark mb-6 flex items-center">
+                    <i class="fa-solid fa-circle-2 text-primary mr-2"></i>
+                    选题2：合记花生糖｜20盒手工蛋卷｜亲自送到老顾客手上(已審核未發佈)
+                </h2>
+
+                <!-- 基本信息表格 -->
+                <div class="glass rounded-xl p-5 mb-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
+                        <i class="fa-solid fa-info-circle text-primary mr-2"></i>
+                        基本信息
+                    </h3>
+                    <table class="w-full text-sm">
+                        <tbody class="divide-y divide-gray-100">
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">类型</td>
+                                <td class="py-2">video</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">分类</td>
+                                <td class="py-2">产品介绍</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">状态</td>
+                                <td class="py-2"><span class="inline-block px-2 py-0.5 rounded bg-blue-100 text-blue-700 text-xs">已审核未发布</span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">创建时间</td>
+                                <td class="py-2">2025-09-11 00:00:00</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">发布时间</td>
+                                <td class="py-2">2025-09-26 00:00:00</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">选题描述/剧本</td>
+                                <td class="py-2 text-gray-500">无描述、无剧本内容</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 数据分析（暂无数据） -->
+                <div class="glass rounded-xl p-5 mb-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
+                        <i class="fa-solid fa-chart-line text-primary mr-2"></i>
+                        数据分析
+                    </h3>
+                    <div class="flex flex-col items-center justify-center py-12 bg-light rounded-lg text-gray-500">
+                        <i class="fa-solid fa-database text-4xl mb-4 opacity-50"></i>
+                        <p class="text-lg font-medium">暂无分析数据</p>
+                        <p class="text-xs mt-2">该选题尚未提供播放量、完播率等核心指标数据</p>
+                    </div>
+                </div>
+
+                <!-- 选题定位 -->
+                <div class="glass rounded-xl p-5">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
+                        <i class="fa-solid fa-bullseye text-secondary mr-2"></i>
+                        选题定位
+                    </h3>
+                    <div class="text-sm text-gray-700 space-y-2 pl-4 border-l-2 border-secondary/30">
+                        <p>核心主题：<strong>老顾客关系维护</strong>，通过“亲自送手工蛋卷”传递品牌温度</p>
+                        <p>价值亮点：聚焦“熟客情感连接”，适合强化本地街坊口碑，提升复购率</p>
+                        <p>后续建议：发布后补充数据追踪，重点关注“3秒完播率”（标题封面吸引力）与“互动率”（情感共鸣度）</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 选题3详情 -->
+        <section id="topic3" class="page-transition page-enter hidden">
+            <div class="glass rounded-2xl shadow-lg p-6 mb-8">
+                <h2 class="text-[clamp(1.2rem,3vw,1.6rem)] font-bold text-dark mb-6 flex items-center">
+                    <i class="fa-solid fa-circle-3 text-primary mr-2"></i>
+                    选题3：合記花生糖｜上海订单来了，我们即刻装箱，安排出货
+                </h2>
+
+                <!-- 基本信息表格 -->
+                <div class="glass rounded-xl p-5 mb-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
+                        <i class="fa-solid fa-info-circle text-primary mr-2"></i>
+                        基本信息
+                    </h3>
+                    <table class="w-full text-sm">
+                        <tbody class="divide-y divide-gray-100">
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">类型</td>
+                                <td class="py-2">video</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">分类</td>
+                                <td class="py-2">产品介绍</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">状态</td>
+                                <td class="py-2"><span class="inline-block px-2 py-0.5 rounded bg-green-100 text-green-700 text-xs">已发布</span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">创建时间</td>
+                                <td class="py-2">2025-09-05 00:00:00</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">发布时间</td>
+                                <td class="py-2">2025-09-11 00:00:00</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 w-28 text-gray-500 font-medium">选题描述/剧本</td>
+                                <td class="py-2 text-gray-500">无描述、无剧本内容</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 数据分析（图表+表格） -->
+                <div class="glass rounded-xl p-5 mb-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
+                        <i class="fa-solid fa-chart-line text-primary mr-2"></i>
+                        数据分析（2025-10-10）
+                    </h3>
+                    
+                    <!-- 图表区域 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="h-56">
+                            <canvas id="topic3Chart1"></canvas>
+                        </div>
+                        <div class="h-56">
+                            <canvas id="topic3Chart2"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 数据表格 -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-3 py-2 text-left text-gray-600 font-medium">指标</th>
+                                    <th class="px-3 py-2 text-center text-gray-600 font-medium">数值</th>
+                                    <th class="px-3 py-2 text-center text-gray-600 font-medium">行业合格线</th>
+                                    <th class="px-3 py-2 text-center text-gray-600 font-medium">表现评估</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr>
+                                    <td class="px-3 py-2 text-gray-700">播放量</td>
+                                    <td class="px-3 py-2 text-center">22,817</td>
+                                    <td class="px-3 py-2 text-center">1万（及格）/10万（优秀）</td>
+                                    <td class="px-3 py-2 text-center text-green-500">良好（接近优秀）</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 text-gray-700">完播率</td>
+                                    <td class="px-3 py-2 text-center">18.21%</td>
+                                    <td class="px-3 py-2 text-center">15%-20%（及格）/25%+（优秀）</td>
+                                    <td class="px-3 py-2 text-center text-green-500">及格（接近优秀）</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 text-gray-700">平均观看时长</td>
+                                    <td class="px-3 py-2 text-center">16.25秒</td>
+                                    <td class="px-3 py-2 text-center">-</td>
+                                    <td class="px-3 py-2 text-center text-gray-600">良好</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 text-gray-700">3秒完播率</td>
+                                    <td class="px-3 py-2 text-center">75.24%</td>
+                                    <td class="px-3 py-2 text-center">50%（及格）/60%+（优秀）</td>
+                                    <td class="px-3 py-2 text-center text-green-500">非常优秀</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 text-gray-700">互动率</td>
+                                    <td class="px-3 py-2 text-center">1.86%</td>
+                                    <td class="px-3 py-2 text-center">1%-2%（及格）/3%+（优秀）</td>
+                                    <td class="px-3 py-2 text-center text-green-500">良好</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 text-gray-700">吸粉量</td>
+                                    <td class="px-3 py-2 text-center">69</td>
+                                    <td class="px-3 py-2 text-center">-</td>
+                                    <td class="px-3 py-2 text-center text-green-500">优秀</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 备注与优化建议 -->
+                <div class="glass rounded-xl p-5">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
+                        <i class="fa-solid fa-lightbulb text-secondary mr-2"></i>
+                        备注与优化建议
+                    </h3>
+                    
+                    <!-- 核心诊断 -->
+                    <div class="mb-5">
+                        <h4 class="font-semibold text-primary mb-2">核心诊断</h4>
+                        <div class="text-sm text-gray-700 space-y-2 pl-4 border-l-2 border-primary/30">
+                            <p>定位：<strong>爆款潜力型内容</strong>，验证“本地特色+远程订单”成功模型</p>
+                            <p>优势：播放量/吸粉量表现优秀，3秒完播率高（标题封面吸引力强），贴近用户生活</p>
+                            <p>目标：微调优化，冲击10万+播放量爆款</p>
+                        </div>
+                    </div>
+
+                    <!-- 优化建议 -->
+                    <div>
+                        <h4 class="font-semibold text-primary mb-2">分点优化建议</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div class="bg-light rounded-lg p-3">
+                                <h5 class="font-medium text-dark mb-2 flex items-center">
+                                    <i class="fa-solid fa-file-video text-primary mr-1"></i>
+                                    内容与脚本
+                                </h5>
+                                <ul class="space-y-1 text-gray-700 pl-5 list-disc">
+                                    <li>前3秒加情绪：“哇！合记收到上海订单！”（惊喜感）</li>
+                                    <li>加产品/打包特写（花生颗粒、填充气泡膜）</li>
+                                    <li>结尾互动：“猜最远寄过哪？点赞为澳门手信加油”</li>
+                                </ul>
+                            </div>
+                            <div class="bg-light rounded-lg p-3">
+                                <h5 class="font-medium text-dark mb-2 flex items-center">
+                                    <i class="fa-solid fa-pen-ruler text-primary mr-1"></i>
+                                    标题与封面
+                                </h5>
+                                <ul class="space-y-1 text-gray-700 pl-5 list-disc">
+                                    <li>标题变体：《澳门糖飘香1300公里到上海！》</li>
+                                    <li>封面：地图标“澳门→上海”+“香飘全国”文案</li>
+                                </ul>
+                            </div>
+                            <div class="bg-light rounded-lg p-3 md:col-span-2">
+                                <h5 class="font-medium text-dark mb-2 flex items-center">
+                                    <i class="fa-solid fa-comments text-primary mr-1"></i>
+                                    互动与转化+爆款复制
+                                </h5>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-gray-700">
+                                    <div>
+                                        <p class="font-medium">互动转化</p>
+                                        <p>置顶：“私信/加微信XXX，全国邮寄，真空保鲜”</p>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">爆款复制</p>
+                                        <p>系列化：《北京订单》《成都订单》；加客户好评截图</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 底部固定导航栏 -->
+    <nav class="fixed bottom-0 left-0 right-0 glass shadow-lg z-50">
+        <div class="flex justify-around items-center p-2">
+            <a href="#home" class="nav-item flex flex-col items-center py-2 px-3 nav-active" data-page="home">
+                <i class="fa-solid fa-home text-lg"></i>
+                <span class="text-xs mt-1">首页</span>
+            </a>
+            <a href="#topic1" class="nav-item flex flex-col items-center py-2 px-3" data-page="topic1">
+                <i class="fa-solid fa-circle-1 text-lg"></i>
+                <span class="text-xs mt-1">选题1</span>
+            </a>
+            <a href="#topic2" class="nav-item flex flex-col items-center py-2 px-3" data-page="topic2">
+                <i class="fa-solid fa-circle-2 text-lg"></i>
+                <span class="text-xs mt-1">选题2</span>
+            </a>
+            <a href="#topic3" class="nav-item flex flex-col items-center py-2 px-3" data-page="topic3">
+                <i class="fa-solid fa-circle-3 text-lg"></i>
+                <span class="text-xs mt-1">选题3</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- JavaScript 逻辑 -->
+    <script>
+        // 1. 页面切换与导航高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const pages = document.querySelectorAll('section');
+            
+            // 初始化图表
+            initCharts();
+
+            // 导航点击事件
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetPageId = this.getAttribute('data-page');
+
+                    // 切换导航高亮
+                    navItems.forEach(nav => nav.classList.remove('nav-active'));
+                    this.classList.add('nav-active');
+
+                    // 页面平滑过渡
+                    pages.forEach(page => {
+                        page.classList.add('page-enter');
+                        setTimeout(() => {
+                            page.classList.add('hidden');
+                        }, 300);
+
+                        if (page.id === targetPageId) {
+                            setTimeout(() => {
+                                page.classList.remove('hidden');
+                                setTimeout(() => {
+                                    page.classList.remove('page-enter');
+                                }, 50);
+                            }, 300);
+                        }
+                    });
+
+                    // 回到顶部
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+
+        // 2. 图表初始化
+        function initCharts() {
+            // 选题1：播放量/完播率/3秒完播率
+            const topic1Ctx1 = document.getElementById('topic1Chart1').getContext('2d');
+            new Chart(topic1Ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['播放量（千）', '完播率（%）', '3秒完播率（%）'],
+                    datasets: [{
+                        label: '选题1核心数据',
+                        data: [5.917, 14.36, 72.23],
+                        backgroundColor: ['#1890FF', '#722ED1', '#52C41A'],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true }
+                    },
+                    plugins: {
+                        title: { display: true, text: '选题1：核心流量指标', font: { size: 14 } }
+                    }
+                }
+            });
+
+            // 选题1：互动/吸粉数据
+            const topic1Ctx2 = document.getElementById('topic1Chart2').getContext('2d');
+            new Chart(topic1Ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['点赞量', '评论数', '分享数', '吸粉量'],
+                    datasets: [{
+                        label: '选题1互动数据',
+                        data: [114, 26, 47, 16],
+                        backgroundColor: '#1890FF',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true }
+                    },
+                    plugins: {
+                        title: { display: true, text: '选题1：互动与吸粉指标', font: { size: 14 } }
+                    }
+                }
+            });
+
+            // 选题3：播放量/完播率/3秒完播率
+            const topic3Ctx1 = document.getElementById('topic3Chart1').getContext('2d');
+            new Chart(topic3Ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['播放量（千）', '完播率（%）', '3秒完播率（%）'],
+                    datasets: [{
+                        label: '选题3核心数据',
+                        data: [22.817, 18.21, 75.24],
+                        backgroundColor: ['#1890FF', '#722ED1', '#52C41A'],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true }
+                    },
+                    plugins: {
+                        title: { display: true, text: '选题3：核心流量指标', font: { size: 14 } }
+                    }
+                }
+            });
+
+            // 选题3：互动/吸粉数据
+            const topic3Ctx2 = document.getElementById('topic3Chart2').getContext('2d');
+            new Chart(topic3Ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['点赞量', '评论数', '分享数', '吸粉量'],
+                    datasets: [{
+                        label: '选题3互动数据',
+                        data: [134, 36, 48, 69],
+                        backgroundColor: '#1890FF',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true }
+                    },
+                    plugins: {
+                        title: { display: true, text: '选题3：互动与吸粉指标', font: { size: 14 } }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
