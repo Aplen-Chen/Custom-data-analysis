@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神總-茶茶巫 选题数据分析报告</title>
+    <!-- 外部资源引入 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#E63946',
+                        secondary: '#457B9D',
+                        accent: '#1D3557',
+                        light: '#F1FAEE',
+                        success: '#4CC9F0',
+                        warning: '#F7B801',
+                        danger: '#F72585',
+                        neutral: '#A8DADC'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .glass {
+                background: rgba(255, 255, 255, 0.85);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border: 1px solid rgba(200, 200, 200, 0.18);
+                box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+            }
+            .card-hover {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            }
+            .progress-bar {
+                height: 8px;
+                border-radius: 4px;
+                overflow: hidden;
+            }
+            .progress-value {
+                height: 100%;
+                transition: width 1s ease-in-out;
+            }
+            .nav-active {
+                color: #E63946;
+                font-weight: 600;
+                position: relative;
+            }
+            .nav-active::after {
+                content: '';
+                position: absolute;
+                bottom: -4px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background-color: #E63946;
+                border-radius: 1px;
+            }
+            .fade-in {
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 min-h-screen">
+    <!-- 背景装饰 -->
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/3 -left-24 w-96 h-96 bg-secondary/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- 顶部导航栏 -->
+    <header class="sticky top-0 z-40 glass">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-accent">
+                神總-茶茶巫 <span class="text-primary">选题分析</span>
+            </h1>
+            <button id="menu-toggle" class="lg:hidden text-gray-700 focus:outline-none">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+            <nav id="main-nav" class="hidden lg:flex space-x-6">
+                <a href="#overview" class="nav-link text-sm hover:text-primary transition-colors">整体概览</a>
+                <a href="#topics" class="nav-link text-sm hover:text-primary transition-colors">选题分析</a>
+                <a href="#summary" class="nav-link text-sm hover:text-primary transition-colors">整体总结</a>
+            </nav>
+        </div>
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="hidden lg:hidden glass border-t border-gray-100">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="#overview" class="text-sm py-2 hover:text-primary transition-colors">整体概览</a>
+                <a href="#topics" class="text-sm py-2 hover:text-primary transition-colors">选题分析</a>
+                <a href="#summary" class="text-sm py-2 hover:text-primary transition-colors">整体总结</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 1. 整体概览 -->
+        <section id="overview" class="mb-16 fade-in">
+            <div class="glass rounded-2xl shadow-lg p-6 md:p-8">
+                <h2 class="text-2xl font-bold text-accent mb-6 flex items-center">
+                    <i class="fa-solid fa-chart-pie text-primary mr-3"></i>
+                    整体概览
+                </h2>
+                
+                <p class="text-gray-700 mb-8">
+                    本次报告共包含9个选题，涵盖<strong>案例分析、教程指南、品牌宣传、行业趋势</strong>4类内容，均为video类型；其中6个选题（选题4-9）有完整数据分析，3个选题（选题1-3）暂无数据；核心数据亮点为<strong>高分享率</strong>（多数选题分享率＞1%），共性问题为<strong>视频过长导致完播率低</strong>（多数＜15%）。
+                </p>
+                
+                <!-- 核心数据卡片 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="glass rounded-xl p-5 card-hover">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                                <i class="fa-solid fa-list-check text-primary"></i>
+                            </div>
+                            <h3 class="font-semibold">选题总数</h3>
+                        </div>
+                        <div class="text-3xl font-bold text-accent">9 个</div>
+                        <div class="text-xs text-gray-500 mt-1">含4类不同内容</div>
+                    </div>
+                    
+                    <div class="glass rounded-xl p-5 card-hover">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center mr-3">
+                                <i class="fa-solid fa-database text-secondary"></i>
+                            </div>
+                            <h3 class="font-semibold">有数据选题</h3>
+                        </div>
+                        <div class="text-3xl font-bold text-accent">6 个</div>
+                        <div class="text-xs text-gray-500 mt-1">选题4-9含完整数据</div>
+                    </div>
+                    
+                    <div class="glass rounded-xl p-5 card-hover">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center mr-3">
+                                <i class="fa-solid fa-share-alt text-success"></i>
+                            </div>
+                            <h3 class="font-semibold">核心亮点</h3>
+                        </div>
+                        <div class="text-lg font-bold text-accent">高分享率</div>
+                        <div class="text-xs text-gray-500 mt-1">多数＞1%</div>
+                    </div>
+                    
+                    <div class="glass rounded-xl p-5 card-hover">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded-full bg-danger/10 flex items-center justify-center mr-3">
+                                <i class="fa-solid fa-exclamation-triangle text-danger"></i>
+                            </div>
+                            <h3 class="font-semibold">共性问题</h3>
+                        </div>
+                        <div class="text-lg font-bold text-accent">完播率低</div>
+                        <div class="text-xs text-gray-500 mt-1">多数＜15%</div>
+                    </div>
+                </div>
+                
+                <!-- 选题分类图表 -->
+                <div class="glass rounded-xl p-5">
+                    <h3 class="text-lg font-semibold mb-4 text-accent">选题分类分布</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="h-64">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span>案例分析</span>
+                                        <span>3 个</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-primary" style="width: 33%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span>品牌宣传</span>
+                                        <span>3 个</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-secondary" style="width: 33%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span>行业趋势</span>
+                                        <span>2 个</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-success" style="width: 22%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span>教程指南</span>
+                                        <span>1 个</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-warning" style="width: 12%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. 选题逐个分析 -->
+        <section id="topics" class="mb-16">
+            <div class="glass rounded-2xl shadow-lg p-6 md:p-8">
+                <h2 class="text-2xl font-bold text-accent mb-6 flex items-center">
+                    <i class="fa-solid fa-file-circle-info text-primary mr-3"></i>
+                    选题逐个分析
+                </h2>
+                
+                <!-- 选题筛选 -->
+                <div class="flex flex-wrap gap-2 mb-8">
+                    <button class="topic-filter px-4 py-1.5 bg-primary text-white rounded-full text-sm active" data-filter="all">全部选题</button>
+                    <button class="topic-filter px-4 py-1.5 bg-gray-200 hover:bg-gray-300 rounded-full text-sm" data-filter="case">案例分析</button>
+                    <button class="topic-filter px-4 py-1.5 bg-gray-200 hover:bg-gray-300 rounded-full text-sm" data-filter="tutorial">教程指南</button>
+                    <button class="topic-filter px-4 py-1.5 bg-gray-200 hover:bg-gray-300 rounded-full text-sm" data-filter="brand">品牌宣传</button>
+                    <button class="topic-filter px-4 py-1.5 bg-gray-200 hover:bg-gray-300 rounded-full text-sm" data-filter="trend">行业趋势</button>
+                </div>
+                
+                <!-- 选题1 -->
+                <div class="topic-card mb-8 glass rounded-xl p-5 card-hover" data-category="case">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-lg font-bold text-accent flex items-center">
+                            <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm mr-2">1</span>
+                            灵魂拷问：手里有20万，你会打工还是创业？发现年轻人更倾向后者，为什么？？？
+                        </h3>
+                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">已发布</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-info-circle text-secondary mr-2"></i>
+                                基础信息
+                            </h4>
+                            <table class="w-full text-sm">
+                                <tbody class="divide-y divide-gray-100">
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">类型</td>
+                                        <td class="py-2">Video</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">分类</td>
+                                        <td class="py-2">案例分析</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">创建时间</td>
+                                        <td class="py-2">2025-10-06 00:00:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">发布时间</td>
+                                        <td class="py-2">2025-10-08 00:00:00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-chart-line text-secondary mr-2"></i>
+                                核心数据
+                            </h4>
+                            <div class="flex items-center justify-center h-40 bg-gray-50 rounded-lg">
+                                <p class="text-gray-500 text-center">暂无分析数据</p>
+                            </div>
+                            
+                            <h4 class="font-semibold text-gray-700 mt-4 mb-3 flex items-center">
+                                <i class="fa-solid fa-sticky-note text-secondary mr-2"></i>
+                                备注
+                            </h4>
+                            <p class="text-sm text-gray-600">无补充说明</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 选题2 -->
+                <div class="topic-card mb-8 glass rounded-xl p-5 card-hover" data-category="tutorial">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-lg font-bold text-accent flex items-center">
+                            <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm mr-2">2</span>
+                            新手创业最容易忽视的三件事，人气不等于成功
+                        </h3>
+                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">已发布</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-info-circle text-secondary mr-2"></i>
+                                基础信息
+                            </h4>
+                            <table class="w-full text-sm">
+                                <tbody class="divide-y divide-gray-100">
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">类型</td>
+                                        <td class="py-2">Video</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">分类</td>
+                                        <td class="py-2">教程指南</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">创建时间</td>
+                                        <td class="py-2">2025-10-03 00:00:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">发布时间</td>
+                                        <td class="py-2">2025-10-04 00:00:00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-chart-line text-secondary mr-2"></i>
+                                核心数据
+                            </h4>
+                            <div class="flex items-center justify-center h-40 bg-gray-50 rounded-lg">
+                                <p class="text-gray-500 text-center">暂无分析数据</p>
+                            </div>
+                            
+                            <h4 class="font-semibold text-gray-700 mt-4 mb-3 flex items-center">
+                                <i class="fa-solid fa-sticky-note text-secondary mr-2"></i>
+                                备注
+                            </h4>
+                            <p class="text-sm text-gray-600">无补充说明</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 选题3 -->
+                <div class="topic-card mb-8 glass rounded-xl p-5 card-hover" data-category="case">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-lg font-bold text-accent flex items-center">
+                            <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm mr-2">3</span>
+                            你以为做一碗牛杂简单？看看澳门锦华牛杂成功背后的经营秘诀(未發佈)
+                        </h3>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">已归档（未发布）</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-info-circle text-secondary mr-2"></i>
+                                基础信息
+                            </h4>
+                            <table class="w-full text-sm">
+                                <tbody class="divide-y divide-gray-100">
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">类型</td>
+                                        <td class="py-2">Video</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">分类</td>
+                                        <td class="py-2">案例分析</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">创建时间</td>
+                                        <td class="py-2">2025-09-03 00:00:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">发布时间</td>
+                                        <td class="py-2">未发布</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-chart-line text-secondary mr-2"></i>
+                                核心数据
+                            </h4>
+                            <div class="flex items-center justify-center h-40 bg-gray-50 rounded-lg">
+                                <p class="text-gray-500 text-center">暂无分析数据</p>
+                            </div>
+                            
+                            <h4 class="font-semibold text-gray-700 mt-4 mb-3 flex items-center">
+                                <i class="fa-solid fa-sticky-note text-secondary mr-2"></i>
+                                备注
+                            </h4>
+                            <p class="text-sm text-gray-600">无补充说明</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 选题4 -->
+                <div class="topic-card mb-8 glass rounded-xl p-5 card-hover" data-category="brand">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-lg font-bold text-accent flex items-center">
+                            <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm mr-2">4</span>
+                            逛遍澳门才发现！茶饮、咖啡和烘焙竟在同一屋檐下，这家店居然玩出了新花样？
+                        </h3>
+                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">已发布</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-info-circle text-secondary mr-2"></i>
+                                基础信息
+                            </h4>
+                            <table class="w-full text-sm">
+                                <tbody class="divide-y divide-gray-100">
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">类型</td>
+                                        <td class="py-2">Video</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">分类</td>
+                                        <td class="py-2">品牌宣传</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">创建时间</td>
+                                        <td class="py-2">2025-09-16 00:00:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">发布时间</td>
+                                        <td class="py-2">2025-09-24 00:00:00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-chart-line text-secondary mr-2"></i>
+                                核心数据 <span class="text-xs text-gray-500 ml-2">(分析日期：2025-10-13)</span>
+                            </h4>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">播放量</span>
+                                        <span class="font-medium">17,348</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-success" style="width: 58%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：1万（及格）、10万（优秀）</div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">完播率</span>
+                                        <span class="font-medium text-danger">9.59%</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-danger" style="width: 48%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：15%-20%（及格）</div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">3秒完播率</span>
+                                        <span class="font-medium text-success">74.02%</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-success" style="width: 93%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：60%+（优秀）</div>
+                                </div>
+                                
+                                <div class="flex justify-between pt-2 border-t border-gray-100">
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">点赞</div>
+                                        <div class="text-gray-700">120</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">评论</div>
+                                        <div class="text-gray-700">29</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">分享</div>
+                                        <div class="text-gray-700">155</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">吸粉</div>
+                                        <div class="text-gray-700">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-sticky-note text-secondary mr-2"></i>
+                                核心备注
+                            </h4>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <span class="font-medium text-primary">核心诊断：</span>
+                                    <span class="text-gray-700">高开低走，"叫好不叫座"——标题封面吸引，但中后段内容冗长、信息过载</span>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-medium text-success">优势：</span>
+                                    <span class="text-gray-700">3秒完播率优秀（74.02%），分享率高（155次）</span>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-medium text-accent">优化建议：</span>
+                                    <ul class="list-disc list-inside text-gray-700 pl-2 space-y-1 mt-1">
+                                        <li>聚焦单一主题，删除冗余镜头</li>
+                                        <li>缩短时长至60-75秒</li>
+                                        <li>结尾提问互动："茶饮+烘焙/咖啡+Taco，你选哪种组合？"</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 选题5 -->
+                <div class="topic-card mb-8 glass rounded-xl p-5 card-hover" data-category="case">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-lg font-bold text-accent flex items-center">
+                            <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm mr-2">5</span>
+                            澳门锦华牛杂20㎡的小店竟然能做到排队的人潮不止，背后隐藏着哪些成功的秘诀？
+                        </h3>
+                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">已发布</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-info-circle text-secondary mr-2"></i>
+                                基础信息
+                            </h4>
+                            <table class="w-full text-sm">
+                                <tbody class="divide-y divide-gray-100">
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">类型</td>
+                                        <td class="py-2">Video</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">分类</td>
+                                        <td class="py-2">案例分析</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">创建时间</td>
+                                        <td class="py-2">2025-09-03 00:00:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">发布时间</td>
+                                        <td class="py-2">2025-09-29 00:00:00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-chart-line text-secondary mr-2"></i>
+                                核心数据 <span class="text-xs text-gray-500 ml-2">(分析日期：2025-10-13)</span>
+                            </h4>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">播放量</span>
+                                        <span class="font-medium text-danger">6,414</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-danger" style="width: 32%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：1万（及格）</div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">完播率</span>
+                                        <span class="font-medium text-danger">10.89%</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-danger" style="width: 54%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：15%-20%（及格）</div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">3秒完播率</span>
+                                        <span class="font-medium text-success">68.00%</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-success" style="width: 85%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：60%+（优秀）</div>
+                                </div>
+                                
+                                <div class="flex justify-between pt-2 border-t border-gray-100">
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">点赞</div>
+                                        <div class="text-gray-700">117</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">评论</div>
+                                        <div class="text-gray-700">41</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">分享</div>
+                                        <div class="text-gray-700 text-success">244</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">吸粉</div>
+                                        <div class="text-gray-700">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-sticky-note text-secondary mr-2"></i>
+                                核心备注
+                            </h4>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <span class="font-medium text-primary">核心诊断：</span>
+                                    <span class="text-gray-700">"被低估的宝藏视频"——中段内容价值高，但视频过长、标题封面吸引力不足</span>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-medium text-success">优势：</span>
+                                    <span class="text-gray-700">分享率现象级（244次，约1/5用户分享），触达"高利润商业模式"用户痛点</span>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-medium text-accent">优化建议：</span>
+                                    <ul class="list-disc list-inside text-gray-700 pl-2 space-y-1 mt-1">
+                                        <li>拆分视频为两个独立主题</li>
+                                        <li>精简结尾，删除离题内容</li>
+                                        <li>标题优化：加入数据增强吸引力</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 选题6 -->
+                <div class="topic-card mb-8 glass rounded-xl p-5 card-hover" data-category="trend">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-lg font-bold text-accent flex items-center">
+                            <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm mr-2">6</span>
+                            轻餐饮老板别再踩坑，教你避开99%的人开店都会犯的3个错误
+                        </h3>
+                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">已发布</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-info-circle text-secondary mr-2"></i>
+                                基础信息
+                            </h4>
+                            <table class="w-full text-sm">
+                                <tbody class="divide-y divide-gray-100">
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">类型</td>
+                                        <td class="py-2">Video</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">分类</td>
+                                        <td class="py-2">行业趋势</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">创建时间</td>
+                                        <td class="py-2">2025-09-01 00:00:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">发布时间</td>
+                                        <td class="py-2">2025-09-18 00:00:00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-chart-line text-secondary mr-2"></i>
+                                核心数据 <span class="text-xs text-gray-500 ml-2">(分析日期：2025-10-13)</span>
+                            </h4>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">播放量</span>
+                                        <span class="font-medium text-danger">7,148</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-danger" style="width: 36%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：1万（及格）</div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">完播率</span>
+                                        <span class="font-medium text-warning">12.60%</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-warning" style="width: 63%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：15%-20%（及格）</div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">3秒完播率</span>
+                                        <span class="font-medium text-success">63.19%</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-success" style="width: 79%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：60%+（优秀）</div>
+                                </div>
+                                
+                                <div class="flex justify-between pt-2 border-t border-gray-100">
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">点赞</div>
+                                        <div class="text-gray-700">142</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium text-success">评论</div>
+                                        <div class="text-gray-700">90</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">分享</div>
+                                        <div class="text-gray-700">101</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">吸粉</div>
+                                        <div class="text-gray-700">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-sticky-note text-secondary mr-2"></i>
+                                核心备注
+                            </h4>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <span class="font-medium text-primary">核心诊断：</span>
+                                    <span class="text-gray-700">"叫好不叫座"——内容价值高，但"门面"（标题/封面/开头）吸引不足</span>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-medium text-success">优势：</span>
+                                    <span class="text-gray-700">评论率是其他选题2倍，用户愿参与"避坑"话题讨论</span>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-medium text-accent">优化建议：</span>
+                                    <ul class="list-disc list-inside text-gray-700 pl-2 space-y-1 mt-1">
+                                        <li>强化3秒钩子：前置焦虑+数据</li>
+                                        <li>精简口语，用花字标注重点</li>
+                                        <li>结尾诱饵："留言'澳门数据'领商圈调研简报"</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 选题7 -->
+                <div class="topic-card mb-8 glass rounded-xl p-5 card-hover" data-category="brand">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-lg font-bold text-accent flex items-center">
+                            <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm mr-2">7</span>
+                            你以为澳门60年老店大利来只有猪扒包？原來还有隐藏菜单和推出的澳门手信
+                        </h3>
+                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">已发布</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-info-circle text-secondary mr-2"></i>
+                                基础信息
+                            </h4>
+                            <table class="w-full text-sm">
+                                <tbody class="divide-y divide-gray-100">
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">类型</td>
+                                        <td class="py-2">Video</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">分类</td>
+                                        <td class="py-2">品牌宣传</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">创建时间</td>
+                                        <td class="py-2">2025-08-28 00:00:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">发布时间</td>
+                                        <td class="py-2">2025-09-23 00:00:00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-chart-line text-secondary mr-2"></i>
+                                核心数据 <span class="text-xs text-gray-500 ml-2">(分析日期：2025-10-13)</span>
+                            </h4>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">播放量</span>
+                                        <span class="font-medium text-success">10,524</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-success" style="width: 53%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：1万（及格）</div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">完播率</span>
+                                        <span class="font-medium text-danger">6.14%</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-danger" style="width: 31%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：15%-20%（及格）</div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">3秒完播率</span>
+                                        <span class="font-medium text-success">71.97%</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-success" style="width: 90%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：60%+（优秀）</div>
+                                </div>
+                                
+                                <div class="flex justify-between pt-2 border-t border-gray-100">
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">点赞</div>
+                                        <div class="text-gray-700">122</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">评论</div>
+                                        <div class="text-gray-700">23</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">分享</div>
+                                        <div class="text-gray-700">99</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">吸粉</div>
+                                        <div class="text-gray-700">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-sticky-note text-secondary mr-2"></i>
+                                核心备注
+                            </h4>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <span class="font-medium text-primary">核心诊断：</span>
+                                    <span class="text-gray-700">"虎头蛇尾"——开头和中段优秀，但结尾冗长、内容失焦，完播率垫底</span>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-medium text-success">优势：</span>
+                                    <span class="text-gray-700">3秒完播率最高，标题"隐藏菜单"悬念感强</span>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-medium text-accent">优化建议：</span>
+                                    <ul class="list-disc list-inside text-gray-700 pl-2 space-y-1 mt-1">
+                                        <li>拆分内容为两个视频</li>
+                                        <li>删除冗余，用互动收尾</li>
+                                        <li>封面修正：纠正"30年老店"错误</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 选题8 -->
+                <div class="topic-card mb-8 glass rounded-xl p-5 card-hover" data-category="brand">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-lg font-bold text-accent flex items-center">
+                            <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm mr-2">8</span>
+                            澳门60年老店大利来，猪扒包如何做到日卖上千个？
+                        </h3>
+                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">已发布</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-info-circle text-secondary mr-2"></i>
+                                基础信息
+                            </h4>
+                            <table class="w-full text-sm">
+                                <tbody class="divide-y divide-gray-100">
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">类型</td>
+                                        <td class="py-2">Video</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">分类</td>
+                                        <td class="py-2">品牌宣传</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">创建时间</td>
+                                        <td class="py-2">2025-08-28 00:00:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">发布时间</td>
+                                        <td class="py-2">2025-09-20 00:00:00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-chart-line text-secondary mr-2"></i>
+                                核心数据 <span class="text-xs text-gray-500 ml-2">(分析日期：2025-10-13)</span>
+                            </h4>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">播放量</span>
+                                        <span class="font-medium text-success">11,896</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-success" style="width: 59%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：1万（及格）</div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">完播率</span>
+                                        <span class="font-medium text-success">15.20%</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-success" style="width: 76%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：15%-20%（及格）</div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">3秒完播率</span>
+                                        <span class="font-medium text-success">67.48%</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-success" style="width: 84%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：60%+（优秀）</div>
+                                </div>
+                                
+                                <div class="flex justify-between pt-2 border-t border-gray-100">
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">点赞</div>
+                                        <div class="text-gray-700">146</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">评论</div>
+                                        <div class="text-gray-700">41</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">分享</div>
+                                        <div class="text-gray-700">171</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">吸粉</div>
+                                        <div class="text-gray-700">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-sticky-note text-secondary mr-2"></i>
+                                核心备注
+                            </h4>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <span class="font-medium text-primary">核心诊断：</span>
+                                    <span class="text-gray-700">"内容粘性高，互动引导不足"——访谈形式提升留存，但缺乏"爽点"和互动</span>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-medium text-success">优势：</span>
+                                    <span class="text-gray-700">平均观看占比最高（67%），"日卖1吨猪扒"等数据有传播性</span>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-medium text-accent">优化建议：</span>
+                                    <ul class="list-disc list-inside text-gray-700 pl-2 space-y-1 mt-1">
+                                        <li>前置震撼数据："日卖1吨猪扒"</li>
+                                        <li>数据可视化：流程图展示模式</li>
+                                        <li>互动设计：结尾抛选择题</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 选题9 -->
+                <div class="topic-card mb-8 glass rounded-xl p-5 card-hover" data-category="trend">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-lg font-bold text-accent flex items-center">
+                            <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm mr-2">9</span>
+                            在澳门开轻餐饮，50万都可能撑不过3个月，你还敢盲目入场吗？
+                        </h3>
+                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">已发布</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-info-circle text-secondary mr-2"></i>
+                                基础信息
+                            </h4>
+                            <table class="w-full text-sm">
+                                <tbody class="divide-y divide-gray-100">
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">类型</td>
+                                        <td class="py-2">Video</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">分类</td>
+                                        <td class="py-2">行业趋势</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">创建时间</td>
+                                        <td class="py-2">2025-08-27 00:00:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 w-28 text-gray-500">发布时间</td>
+                                        <td class="py-2">2025-09-16 00:00:00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-chart-line text-secondary mr-2"></i>
+                                核心数据 <span class="text-xs text-gray-500 ml-2">(分析日期：2025-10-13)</span>
+                            </h4>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">播放量</span>
+                                        <span class="font-medium text-success">21,753</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-success" style="width: 65%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：1万（及格）、10万（优秀）</div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">完播率</span>
+                                        <span class="font-medium text-warning">10.69%</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-warning" style="width: 53%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：15%-20%（及格）</div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-600">3秒完播率</span>
+                                        <span class="font-medium text-success">67.96%</span>
+                                    </div>
+                                    <div class="progress-bar bg-gray-200">
+                                        <div class="progress-value bg-success" style="width: 85%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">行业参考：60%+（优秀）</div>
+                                </div>
+                                
+                                <div class="flex justify-between pt-2 border-t border-gray-100">
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">点赞</div>
+                                        <div class="text-gray-700">253</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">评论</div>
+                                        <div class="text-gray-700">134</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium text-success">分享</div>
+                                        <div class="text-gray-700">341</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">吸粉</div>
+                                        <div class="text-gray-700">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                <i class="fa-solid fa-sticky-note text-secondary mr-2"></i>
+                                核心备注
+                            </h4>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <span class="font-medium text-primary">核心诊断：</span>
+                                    <span class="text-gray-700">"高分享驱动，首尾需优化"——播放量和分享量最高，但开头钩子弱、结尾拖沓</span>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-medium text-success">优势：</span>
+                                    <span class="text-gray-700">话题贴近"创业焦虑"，用户愿分享给同行，社交属性强</span>
+                                </div>
+                                
+                                <div>
+                                    <span class="font-medium text-accent">优化建议：</span>
+                                    <ul class="list-disc list-inside text-gray-700 pl-2 space-y-1 mt-1">
+                                        <li>强化3秒钩子：用焦虑+悬念开场</li>
+                                        <li>精简结尾：用"一句话总结+领资料"替代冗长回顾</li>
+                                        <li>封面修正：纠正"老虎监"错别字</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 整体总结 -->
+        <section id="summary" class="mb-20">
+            <div class="glass rounded-2xl shadow-lg p-6 md:p-8">
+                <h2 class="text-2xl font-bold text-accent mb-6 flex items-center">
+                    <i class="fa-solid fa-check-circle text-primary mr-3"></i>
+                    整体总结
+                </h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- 核心优势 -->
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="text-lg font-bold text-accent mb-4 flex items-center">
+                            <i class="fa-solid fa-plus-circle text-success mr-2"></i>
+                            核心优势
+                        </h3>
+                        <ul class="space-y-4">
+                            <li class="flex">
+                                <div class="flex-shrink-0 w-6 h-6 rounded-full bg-success/10 flex items-center justify-center mt-0.5 mr-3">
+                                    <i class="fa-solid fa-check text-success text-xs"></i>
+                                </div>
+                                <div>
+                                    <span class="font-medium">内容价值高：</span>
+                                    <span class="text-gray-700 text-sm">6个有数据选题的平均观看时长占比均达65%左右，分享率普遍＞1%，证明内容聚焦"创业干货、品牌案例"，用户认可其社交价值</span>
+                                </div>
+                            </li>
+                            <li class="flex">
+                                <div class="flex-shrink-0 w-6 h-6 rounded-full bg-success/10 flex items-center justify-center mt-0.5 mr-3">
+                                    <i class="fa-solid fa-check text-success text-xs"></i>
+                                </div>
+                                <div>
+                                    <span class="font-medium">主题精准：</span>
+                                    <span class="text-gray-700 text-sm">聚焦澳门本地餐饮创业，覆盖"案例拆解、避坑指南、品牌宣传"，目标用户（创业者、加盟商）明确</span>
+                                </div>
+                            </li>
+                            <li class="flex">
+                                <div class="flex-shrink-0 w-6 h-6 rounded-full bg-success/10 flex items-center justify-center mt-0.5 mr-3">
+                                    <i class="fa-solid fa-check text-success text-xs"></i>
+                                </div>
+                                <div>
+                                    <span class="font-medium">3秒完播率优秀：</span>
+                                    <span class="text-gray-700 text-sm">多数选题3秒完播率＞65%，标题和封面的"悬念/焦虑"设计有效</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 共性问题 -->
+                    <div class="glass rounded-xl p-6">
+                        <h3 class="text-lg font-bold text-accent mb-4 flex items-center">
+                            <i class="fa-solid fa-minus-circle text-danger mr-2"></i>
+                            共性问题
+                        </h3>
+                        <ul class="space-y-4">
+                            <li class="flex">
+                                <div class="flex-shrink-0 w-6 h-6 rounded-full bg-danger/10 flex items-center justify-center mt-0.5 mr-3">
+                                    <i class="fa-solid fa-times text-danger text-xs"></i>
+                                </div>
+                                <div>
+                                    <span class="font-medium">视频过长：</span>
+                                    <span class="text-gray-700 text-sm">4个选题时长超1分钟（2个超3分钟），导致完播率普遍＜15%，影响平台推荐</span>
+                                </div>
+                            </li>
+                            <li class="flex">
+                                <div class="flex-shrink-0 w-6 h-6 rounded-full bg-danger/10 flex items-center justify-center mt-0.5 mr-3">
+                                    <i class="fa-solid fa-times text-danger text-xs"></i>
+                                </div>
+                                <div>
+                                    <span class="font-medium">内容失焦：</span>
+                                    <span class="text-gray-700 text-sm">部分选题混剪多主题（如选题4"多业态+联名+加盟"），用户注意力分散</span>
+                                </div>
+                            </li>
+                            <li class="flex">
+                                <div class="flex-shrink-0 w-6 h-6 rounded-full bg-danger/10 flex items-center justify-center mt-0.5 mr-3">
+                                    <i class="fa-solid fa-times text-danger text-xs"></i>
+                                </div>
+                                <div>
+                                    <span class="font-medium">转化引导弱：</span>
+                                    <span class="text-gray-700 text-sm">所有选题吸粉量为0，结尾互动多为模糊指令，缺乏高价值诱饵</span>
+                                </div>
+                            </li>
+                            <li class="flex">
+                                <div class="flex-shrink-0 w-6 h-6 rounded-full bg-danger/10 flex items-center justify-center mt-0.5 mr-3">
+                                    <i class="fa-solid fa-times text-danger text-xs"></i>
+                                </div>
+                                <div>
+                                    <span class="font-medium">细节瑕疵：</span>
+                                    <span class="text-gray-700 text-sm">封面错别字（选题7"30年老店"、选题9"老虎监"）影响专业度</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 数据对比图表 -->
+                <div class="glass rounded-xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-accent mb-4">选题核心数据对比</h3>
+                    <div class="h-80">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- 优化优先级 -->
+                <div class="glass rounded-xl p-6">
+                    <h3 class="text-lg font-bold text-accent mb-4 flex items-center">
+                        <i class="fa-solid fa-list-ol text-secondary mr-2"></i>
+                        优化优先级
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center mt-0.5 mr-4 font-bold">1</div>
+                            <div>
+                                <span class="font-medium">缩短时长：</span>
+                                <span class="text-gray-700">优先将超1分钟视频剪至90秒内，聚焦单一主题</span>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary/80 text-white flex items-center justify-center mt-0.5 mr-4 font-bold">2</div>
+                            <div>
+                                <span class="font-medium">强化开头：</span>
+                                <span class="text-gray-700">所有选题前5秒用"数据震撼+焦虑前置"钩子（如"日卖1吨猪扒""50万3个月蚀光"）</span>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary/60 text-white flex items-center justify-center mt-0.5 mr-4 font-bold">3</div>
+                            <div>
+                                <span class="font-medium">明确互动：</span>
+                                <span class="text-gray-700">结尾用"领资料（调研简报/成本表）"或"选择题"引导，提升评论和私域转化</span>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary/40 text-white flex items-center justify-center mt-0.5 mr-4 font-bold">4</div>
+                            <div>
+                                <span class="font-medium">修正细节：</span>
+                                <span class="text-gray-700">统一封面信息（如老店年份、品牌名），避免错别字</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <nav class="fixed bottom-0 left-0 right-0 glass shadow-lg z-40 lg:hidden">
+        <div class="flex justify-around items-center p-3">
+            <a href="#overview" class="flex flex-col items-center py-1 px-2 nav-link">
+                <i class="fa-solid fa-chart-pie text-lg"></i>
+                <span class="text-xs mt-1">概览</span>
+            </a>
+            <a href="#topics" class="flex flex-col items-center py-1 px-2 nav-link">
+                <i class="fa-solid fa-file-circle-info text-lg"></i>
+                <span class="text-xs mt-1">选题</span>
+            </a>
+            <a href="#summary" class="flex flex-col items-center py-1 px-2 nav-link">
+                <i class="fa-solid fa-check-circle text-lg"></i>
+                <span class="text-xs mt-1">总结</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- JavaScript -->
+    <script>
+        // 移动端菜单切换
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // 导航高亮
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        window.addEventListener('scroll', function() {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= (sectionTop - 150)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('nav-active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('nav-active');
+                }
+            });
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                // 关闭移动菜单（如果打开）
+                document.getElementById('mobile-menu').classList.add('hidden');
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // 选题筛选
+        const topicFilters = document.querySelectorAll('.topic-filter');
+        const topicCards = document.querySelectorAll('.topic-card');
+        
+        topicFilters.forEach(filter => {
+            filter.addEventListener('click', function() {
+                // 更新筛选按钮样式
+                topicFilters.forEach(btn => {
+                    btn.classList.remove('active', 'bg-primary', 'text-white');
+                    btn.classList.add('bg-gray-200', 'hover:bg-gray-300');
+                });
+                this.classList.add('active', 'bg-primary', 'text-white');
+                this.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+                
+                const category = this.getAttribute('data-filter');
+                
+                // 筛选选题卡片
+                topicCards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-category') === category) {
+                        card.style.display = 'block';
+                        setTimeout(() => {
+                            card.classList.add('fade-in');
+                        }, 50);
+                    } else {
+                        card.style.display = 'none';
+                        card.classList.remove('fade-in');
+                    }
+                });
+            });
+        });
+        
+        // 初始化图表
+        window.addEventListener('load', function() {
+            // 选题分类图表
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            new Chart(categoryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['案例分析', '品牌宣传', '行业趋势', '教程指南'],
+                    datasets: [{
+                        data: [3, 3, 2, 1],
+                        backgroundColor: [
+                            '#E63946',
+                            '#457B9D',
+                            '#4CC9F0',
+                            '#F7B801'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+            
+            // 数据对比图表
+            const comparisonCtx = document.getElementById('comparisonChart').getContext('2d');
+            new Chart(comparisonCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['选题4', '选题5', '选题6', '选题7', '选题8', '选题9'],
+                    datasets: [
+                        {
+                            label: '播放量（千）',
+                            data: [17.3, 6.4, 7.1, 10.5, 11.9, 21.8],
+                            backgroundColor: '#457B9D',
+                            borderRadius: 4
+                        },
+                        {
+                            label: '完播率（%）',
+                            data: [9.6, 10.9, 12.6, 6.1, 15.2, 10.7],
+                            backgroundColor: '#E63946',
+                            borderRadius: 4
+                        },
+                        {
+                            label: '3秒完播率（%）',
+                            data: [74.0, 68.0, 63.2, 72.0, 67.5, 68.0],
+                            backgroundColor: '#4CC9F0',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
